@@ -17,52 +17,34 @@ PyPSA-DESOpt-Heat is a linear programming district energy system optimization mo
 
 - [PyPSA-DESOpt-Heat](#PyPSA-DESOpt-Heat)
   - [Intro](#Intro)
-  - [Feature overview](#Feature overview)
+  - [Feature overview](#Feature-overview)
   - [Contents](#contents)
   - [Description](#description)
-  - [Getting Started](#getting-started)
-    - [Requirements](#requirements)
   - [Install](#install)
-    - [Anaconda or mamba](#anaconda-or-mamba)
   - [Solver](#solver)
-    - [Gurobi](#gurobi)
   - [Usage](#usage)
   - [Contribute](#contribute)
   - [License](#license)
+  - [Example](#Example)
 
 ## Description
 
-To run the model, the pypsa componets have to be defined in the csv network files and a cost function of the district heating network build out has to be defined. For the calcuation of the DHN cost function the sensitivity mode of the pyomo-based mixed-integer linear programming district heating
-network design model topotherm can be used.
+To run the model, ensure the following:
 
-## Getting Started
+- All required **PyPSA components** are defined in the CSV network files located in the `model` folder.
+- A **cost function** for the district heating network (DHN) build-out is specified in the `cost_func_heat_grid.csv` file.
 
-This repository needs a PC capable to run python and its standard libraries.
-
-### Requirements
-
-* Anaconda, mamba or venv
+The cost function for the DHN can be calculated using the **sensitivity mode** of the **Topotherm** model — a **Pyomo-based mixed-integer linear programming (MILP)** tool for district heating network design.
 
 ## Install
 
-Use git to clone this repository into your computer. Then, install topotherm
-with a package manager such as Anaconda, or directly with Python.
-
-### Anaconda or mamba
-
-We recommend to install the dependencies with anaconda or mamba:
-
-```mamba
-cd PyPSA-DESOpt-Heat
-mamba env create -f environment.yml -n PyPSADESOptHeat
-mamba activate PyPSADESOptHeat
-```
+1. Create and activate enviroment. Example with anaconda:   `conda activate PyPSADESOptHeat`
+2. cd to folder with github clone
+3. `pip install -e .`
 
 ## Solver
 
-### Gurobi
-
-A free academic license is available and can be installed by following
+A free academic license of gurobi is available and can be installed by following
 the documentation [here](https://support.gurobi.com/hc/en-us/articles/360044290292-How-do-I-install-Gurobi-for-Python-).
 
 ## Usage
@@ -73,3 +55,10 @@ Run the script main.py
 
 Pull requests and any feedback regarding the code are very welcome. For major
 changes, please open an issue first to discuss what you would like to change.
+
+
+## Example
+
+District heating network heat supply: 
+
+![dhn_heat_supply](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/results/grch_60-45/district%20heat_grch_60-45_flow.svg "dhn_heat_supply")

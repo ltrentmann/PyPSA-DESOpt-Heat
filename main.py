@@ -157,6 +157,9 @@ for scenario in scenarios:
 
     network.consistency_check()
 
+    # generate topographical representation of network 'network' in the SVG format
+    pypsatopo.generate(network, file_output = "diagrams/network.svg", file_format = "svg")
+
     start = time()
     network.optimize(
         solver_name='gurobi',
