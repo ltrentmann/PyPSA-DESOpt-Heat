@@ -34,9 +34,10 @@ To run the model, ensure the following:
 - All required **PyPSA components** are defined in the CSV network files located in the `model` folder.
 - A **cost function** for the district heating network (DHN) build-out is specified in the `cost_func_heat_grid.csv` file.
 
-The cost function for the district heating network (DHN) can be calculated using the **sensitivity mode** of the **[Topotherm](https://github.com/jylambert/topotherm)** model — a **Pyomo-based mixed-integer linear programming (MILP)** tool for district heating network design.
+The cost function for the district heating network (DHN) can be calculated using the **sensitivity mode** of the **[topotherm](https://github.com/jylambert/topotherm)** model — a **Pyomo-based mixed-integer linear programming (MILP)** tool for district heating network design.
 
-For more details, visit the [Topotherm GitHub repository](https://github.com/jylambert/topotherm).
+For more details, visit the [topotherm GitHub repository](https://github.com/jylambert/topotherm) or refer to the original research paper:
+> Lambert, Jerry and Ceruti, Amedeo and Spliethoff, Hartmut, Benchmark of Mixed-Integer Linear Programming Formulations for District Heating Network Design. Energy, Volume 308, 2024, 132885, ISSN 0360-5442, https://doi.org/10.1016/j.energy.2024.132885
 
 
 For a more detailed description of the PyPSA components, refer to the [PyPSA Documentation](https://pypsa.readthedocs.io/) or consult the following publication:

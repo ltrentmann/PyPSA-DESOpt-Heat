@@ -8,12 +8,11 @@ from matplotlib.colors import LinearSegmentedColormap
 # === Global Variables ===
 COLOR_DICT = {
     "geothermal plant": "#0f1b5f", "geothermal hp": "#0f1b5f", "st panels": "#d64c13",
-    "biomethane CHP": "#007c30", "biomethane CHP generator": "#007c30",
+    "biomethane CHP": "#007c30",
     "biomethane boiler": "#679a1d", "PTES charge": "#f9ba00", "PTES discharge": "#f9ba00",
     "large scale heat pump": "#00778a", "pv panels": "#f9ba00", "battery storage": "#ffdc00",
-    "electricity grid": "#CCCCCC", "TTES": "#c4071b", "TTES charge": "#f9ba00", "TTES discharge": "#f9ba00",
-    "dec air heat pump": "#005293", "dec ground heat pump": "#0f1b5f", "dec pellet boiler": "#007c30",
-    "TTES storage": "#c4071b", "elec boiler": "#CCCCCC"
+    "electricity grid": "#CCCCCC", "TTES": "#f9ba00", "PTES": "#f9ba00", "TTES charge": "#f9ba00", "TTES discharge": "#f9ba00",
+    "dec air heat pump": "#005293", "dec ground heat pump": "#0f1b5f", "dec pellet boiler": "#007c30", "elec boiler": "#CCCCCC"
 }
 
 mycmap = LinearSegmentedColormap.from_list('mycmap', ['#f9ba00', '#c4071b'])
@@ -55,14 +54,16 @@ def flow_plot(network, bus_name, order, demand, title, folder):
     plt.rcParams.update({'font.size': 10})
 
     flows = get_bus_flows(network, bus_name)
-    flowsstorage = flows.filter(like='PTES charge')
+    flowsstorage = flows.filter(like='TTES charge')
+ 
     if "geothermal hp" in flows.columns:
         flows["geothermal hp"] = flows["geothermal hp"].abs()
 
     flows = flows.dropna(axis=1, how='all')
-    flows = flows.loc[:, flows.abs().max() > 0.01]
+    flows = flows.loc[:, abs(flows).max() > 0.01]
     flowsheating = flows.filter(like='heating grid')
-    flows = flows.drop(columns=flowsheating.columns, errors='ignore').clip(lower=0)
+    flows = flows.drop(columns=flowsheating.columns, errors='ignore')
+    flows = flows.clip(lower=0)
 
     flows = flows[[x for x in order if x in flows.columns]]
 
@@ -98,13 +99,15 @@ def flow_plot(network, bus_name, order, demand, title, folder):
 
     if not flowsstorage.empty:
         flowsstorage.resample('D').mean().plot(ax=ax1, color=COLOR_DICT, alpha=0.8)
-    if not flowsheating.empty:
-        flowsheating.resample('D').mean().sum(axis=1).abs().plot(ax=ax1, color='black', alpha=0.8)
+
+    if bus_name == "district heat":
+        if not flowsheating.empty:
+            flowsheating.resample('D').mean().sum(axis=1).abs().plot(ax=ax1, color='black', alpha=0.8)
 
     ax1.set_ylabel("Energy in MW")
     ax1.set_xlabel("Date")
     ax1.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=5, frameon=True, framealpha=0.8)
-    ax1.set_ylim(0, round(flows.resample('D').mean().sum(axis=1).max()))
+    ax1.set_ylim(round(flowsstorage.resample('D').mean().sum(axis=1).min()), round(flows.resample('D').mean().sum(axis=1).max()))
     ax1.grid(True)
 
     sum_values = flows.sum()
@@ -113,8 +116,25 @@ def flow_plot(network, bus_name, order, demand, title, folder):
         colors=[COLOR_DICT.get(i, "#CCCCCC") for i in sum_values.index],
         wedgeprops={"alpha": 0.8}
     )
+    # Normalize values to percentages
+    percentages = (sum_values / sum_values.sum()) * 100
 
-    percentages = sum_values / sum_values.sum() * 100
+    # Loop through each percentage and adjust label position
+    for i, pct in enumerate(percentages):
+        x, y = autotexts[i].get_position()  # Original position
+
+        # Adjust distance based on size
+        if pct < 10:
+            y *= 0.9  # Move further left (more outside)
+        elif pct < 3:
+            x *= 1.1  # Slight left adjustment
+        elif 3 <= pct < 5:
+            x *= -0.9  # Slight right (more inside)
+
+        autotexts[i].set_position((x, y))
+        autotexts[i].set_color("black")
+
+    '''percentages = sum_values / sum_values.sum() * 100
     for i, (autotext, pct) in enumerate(zip(autotexts, percentages)):
         x, y = autotext.get_position()
         scale = 2 if pct < 10 else 1
@@ -123,14 +143,11 @@ def flow_plot(network, bus_name, order, demand, title, folder):
             # Use the index i instead of lookup by text
             shift = -0.2 if i % 2 == 0 else 0.2
             autotext.set_position((autotext.get_position()[0] + shift, y))
-        autotext.set_color("black")
-
-    capcost = network.objective - network.statistics.capex().sum() - network.statistics.opex().sum()
-    print('Capcost:', capcost)
+        autotext.set_color("black")'''
 
     if bus_name == "district heat":
         total_demand = network.loads_t.p_set["heat demand"].sum()
-        lcoh = (network.statistics.capex().sum() + network.statistics.opex().sum() + capcost) / total_demand
+        lcoh = (network.statistics.capex().sum() + network.statistics.opex().sum() + network.model.variables["pw_link_capcost"].solution) / total_demand
         ax2.text(0, -1.5, f'LCOH: {lcoh:.2f} €/MWh', ha='center', va='center')
 
         dec = network.generators_t.p.loc[:, network.generators.carrier.str.contains('dec')].sum()
@@ -140,14 +157,6 @@ def flow_plot(network, bus_name, order, demand, title, folder):
 
         ax2.text(0, -1.75, f'DHN supply: {(1 - dec_share_peak) * 100:.2f}%', ha='center', va='center')
         ax2.text(0, -2, f'Area: {total_area_expr:.2f} m²', ha='center', va='center')
-
-        dec_capex = network.statistics.capex().reset_index()
-        dec_opex = network.statistics.opex().reset_index()
-        dec_capex_sum = dec_capex[dec_capex['carrier'].str.contains('Decentral', na=False)][0].sum()
-        dec_opex_sum = dec_opex[dec_opex['carrier'].str.contains('Decentral', na=False)][0].sum()
-
-        lcoh_dhn = (network.statistics.capex().sum() + network.statistics.opex().sum() + capcost - dec_opex_sum - dec_capex_sum) / (total_demand * (1 - dec_share))
-        ax2.text(0, -2.25, f'LCOH_dhn: {lcoh_dhn:.2f} €/MWh', ha='center', va='center')
 
     plt.tight_layout()
     fig.savefig(os.path.join(network_folder, f'{bus_name}_{folder}_flow.svg'))
@@ -203,9 +212,7 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
     pressure = 101325  # Pa
     temperature = (temp_h + temp_c)/2 + 273.15  # 60°C to Kelvin
     density = CP.PropsSI("D", "P", pressure, "T", temperature, fluid)  # Density in kg/m³
-    print('Density: ', density, 'kg/m³')
     heat_capacity = CP.PropsSI("C", "P", pressure, "T", temperature, fluid)  # J/kgK
-    print('Heat capacity: ', heat_capacity, 'J/kgK')
     volume = TES * 1000000000 * 3.6 / ((temp_h - temp_c) * heat_capacity * density)
     diameter = (4 * volume / (math.pi * total_area_expr)) ** 0.5
     height = volume / total_area_expr
@@ -219,3 +226,131 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
     plt.tight_layout()
     plt.savefig(os.path.join(network_folder, f'{bus_name}_{folder}_storage_energy.svg'))
 
+
+def create_summary_table(network):
+    """
+    Generates a summary table with installed capacity, CapEx, and OpEx for each component.
+    
+    Parameters:
+    -----------
+    network : pypsa.Network
+        The PyPSA network after running network.optimize().
+    
+    Returns:
+    --------
+    pd.DataFrame
+        A summary table with Installed Capacity (MW), CapEx (€), and OpEx (€) for generators.
+    """
+    
+    summary_data = []
+
+    # --- Generators ---
+    for gen_name, gen in network.generators.iterrows():
+        if gen.p_nom_extendable:
+            installed_capacity = network.generators.at[gen_name, "p_nom_opt"]
+        else:
+            installed_capacity = gen.p_nom
+        capex = gen.capital_cost * installed_capacity
+        op_series = network.generators_t.p[gen_name]
+        if gen_name in network.generators_t.marginal_cost:
+            opex = (abs(network.generators_t.marginal_cost[gen_name] * op_series)).sum()
+
+        summary_data.append({
+            "Component": gen_name,
+            "Type": "Generator",
+            "Carrier": gen.carrier,
+            "Installed Capacity (MW)": installed_capacity,
+            "Generation (MWh)": abs(op_series.sum()),
+            "CapEx (€)": capex,
+            "OpEx (€)": opex
+        })
+
+    # --- Extendable Storage Units (optional) ---
+    for store_name, store in network.storage_units.iterrows():
+        if store.p_nom_extendable:
+            installed_capacity = network.storage_units.at[store_name, "p_nom_opt"]
+        else:
+            installed_capacity = store.p_nom
+
+        capex = store.capital_cost * installed_capacity
+        op_series = network.storage_units_t.p[store_name]
+        if store_name in network.storage_units_t.marginal_cost:
+            opex = (abs(network.storage_units_t.marginal_cost[store_name] * op_series)).sum()
+
+        summary_data.append({
+            "Component": store_name,
+            "Type": "Storage",
+            "Carrier": store.carrier,
+            "Installed Capacity (MW)": installed_capacity,
+            "Generation (MWh)": abs(op_series.sum()),
+            "CapEx (€)": capex,
+            "OpEx (€)": opex
+        })
+
+    # --- Extendable Stores (optional) ---
+    for store_name, store in network.stores.iterrows():
+        if store.e_nom_extendable:
+            installed_capacity = network.stores.at[store_name, "e_nom_opt"]
+        else:
+            installed_capacity = store.e_nom
+
+        capex = store.capital_cost * installed_capacity
+        op_series = network.stores_t.e[store_name]
+        if store_name in network.stores_t.marginal_cost:
+            opex = (abs(network.stores_t.marginal_cost[store_name] * op_series)).sum() 
+
+        summary_data.append({
+            "Component": store_name,
+            "Type": "Store",
+            "Carrier": store.carrier,
+            "Installed Capacity (MW)": installed_capacity,
+            "Generation (MWh)": abs(op_series.sum()),
+            "CapEx (€)": capex,
+            "OpEx (€)": opex
+        })
+
+    # --- Links ---
+    for link_name, link in network.links.iterrows():
+        # Determine installed capacity
+        if link.p_nom_extendable:
+            p_nom_opt = network.links.at[link_name, "p_nom_opt"]
+
+            # Check if efficiency is a time series
+            if link_name in network.links_t.efficiency:
+                mean_efficiency = network.links_t.efficiency[link_name].mean()
+            else:
+                mean_efficiency = link.efficiency
+
+            installed_capacity = p_nom_opt * mean_efficiency
+        else:
+            installed_capacity = link.p_nom
+
+        capex = link.capital_cost * installed_capacity
+        op_series = network.links_t.p1[link_name]
+        if link_name in network.links_t.p2:
+            op_series2 = network.links_t.p2[link_name]
+        if link_name in network.links_t.marginal_cost:
+            opex = (abs(network.links_t.marginal_cost[link_name] * op_series)).sum()
+
+        if link_name == "heating grid":
+            capex = network.model.variables["pw_link_capcost"].solution.item()
+
+        summary_data.append({
+            "Component": link_name,
+            "Type": "Link",
+            "Carrier": link.carrier,
+            "Installed Capacity (MW)": installed_capacity,
+            "Generation (MWh)": abs(op_series.sum()),
+            "Generation2 (MWh)": abs(op_series2.sum()) if 'op_series2' in locals() else 0,
+            "CapEx (€)": capex,
+            "OpEx (€)": opex
+        })
+
+    
+    # Optional: Add lines, transformers, etc.
+
+    summary_df = pd.DataFrame(summary_data)
+    summary_df = summary_df.sort_values(by="CapEx (€)", ascending=False).reset_index(drop=True)
+
+
+    return summary_df

@@ -219,4 +219,18 @@ def add_piecewise_cost_link(n, snapshots, basepath, network_folder, INTEREST, RE
         m.add_constraints(capcost >= a * m.variables["Link-p_nom"].loc[link_name] + b,
                           name=f"pw_link_epigraph_seg_{i}")
 
+    # Plot
+    fig, ax = plt.subplots(figsize=(6, 6))
+    # Original and adjusted curves
+    ax.plot(breakpoints, annualized_costs, 'o-', label='DHN cost function', color='#0f1b5f')
+    # Epigraph region
+    ax.fill_between(breakpoints, annualized_costs, max(annualized_costs) * 1.1, alpha=0.1, color='#CCCCCC', label='Epigraph (feasible region)')
+    ax.set_xlabel('Capacity (MW)')
+    ax.set_ylabel('Annualized Cost [€/year]')
+    ax.grid(True)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=2)
+    plt.tight_layout()
+    # save the plot in results folder
+    plt.savefig(f"./results/{RESULTS}/cost_curve_adjustment.svg")
+
     m.objective += capcost

@@ -1,4 +1,2 @@
 name,bus,p_nom_extendable,p_nom_max,carrier,build_year,lifetime,cyclic_state_of_charge,max_hours,efficiency_store,efficiency_dispatch,standing_loss_ts,standing_loss,investment,FOM,VOM,p_nom_max_area,factor,capital_cost
-battery storage,district elec,True,inf,battery storage,0,25.0,True,4.0,0.985,0.975,,4.16665e-05,660000.0,570.0,11.91,,,42817.89543906003
-TTES storage,district heat,True,0.0,,0,40.0,True,2.5,0.9,0.9,TTES,,8291.9,18.75,10.0,212200.0,0.050595,437.68572112917656
-PTES storage,district heat,True,0.0,,0,40.0,True,1000.0,0.9,0.9,PTES,,1095170.0,8450.0,10.0,212200.0,59.523,63781.80980342747
+battery storage,district elec,True,inf,battery storage,0,25.0,True,4.0,0.985,0.975,,4.16665e-05,660000.0,570.0,11.91,212200.0,0,42817.89543906003

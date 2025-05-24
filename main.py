@@ -97,20 +97,20 @@ for scenario in scenarios:
     # --- Generator Parameters ---
     for gen, row in df_generators.iterrows():
         fuel, eff, p_max_pu, p_min_pu = add_effs_and_marginalcosts(gen, row, df_timeseries)
-        network.generators_t.marginal_cost[gen] = (fuel + row.emission * CO2_PRICE) / pd.Series(eff).mean() + row.VOM
-        network.generators_t.efficiency[gen] = eff
-        network.generators_t.p_max_pu[gen] = p_max_pu
-        network.generators_t.p_min_pu[gen] = p_min_pu
-        network.generators.capital_cost[gen] = row.capital_cost
+        network.generators_t["marginal_cost"][gen] = (fuel + row.emission * CO2_PRICE) / pd.Series(eff).mean() + row.VOM
+        network.generators_t["efficiency"][gen] = eff
+        network.generators_t["p_max_pu"][gen] = p_max_pu
+        network.generators_t["p_min_pu"][gen] = p_min_pu
+        network.generators.loc[gen, "capital_cost"] = row.capital_cost
 
     # --- Link Parameters ---
     for link, row in df_links.iterrows():
         fuel, eff, p_max_pu, p_min_pu = add_effs_and_marginalcosts(link, row, df_timeseries)
-        network.links_t.efficiency[link] = eff
-        network.links_t.p_max_pu[link] = p_max_pu
-        network.links_t.p_min_pu[link] = p_min_pu
-        network.links_t.marginal_cost[link] = row.VOM if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean()
-        network.links.capital_cost[link] = row.capital_cost * pd.Series(eff).mean()
+        network.links_t["efficiency"][link] = eff
+        network.links_t["p_max_pu"][link] = p_max_pu
+        network.links_t["p_min_pu"][link] = p_min_pu
+        network.links_t["marginal_cost"][link] = row.VOM if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean()
+        network.links.loc[link, "capital_cost"] = row.capital_cost * pd.Series(eff).mean()
 
     # --- Additional Link Efficiencies ---
     eff_path = os.path.join(network_folder, "links-efficiency2.csv")
@@ -122,22 +122,21 @@ for scenario in scenarios:
     # --- Storage Parameters ---
     for sto, row in df_stores.iterrows():
         loss = add_seasonal_effs(sto, row, df_timeseries)
-        network.stores_t.standing_loss[sto] = loss
-        network.stores.capital_cost[sto] = row.capital_cost
-        network.stores_t.marginal_cost[sto] = row.VOM
+        network.stores_t["standing_loss"][sto] = loss
+        network.stores.loc[sto, "capital_cost"] = row.capital_cost
+        network.stores_t["marginal_cost"][sto] = row.VOM
 
     for sto, row in df_storageunits.iterrows():
         loss = add_seasonal_effs(sto, row, df_timeseries)
-        network.storage_units_t.standing_loss[sto] = loss
-        network.storage_units.capital_cost[sto] = row.capital_cost
-        network.storage_units_t.marginal_cost[sto] = row.VOM
+        network.storage_units_t["standing_loss"][sto] = loss
+        network.storage_units.loc[sto, "capital_cost"] = row.capital_cost
+        network.storage_units_t["marginal_cost"][sto] = row.VOM
 
     # --- DHN Link Recalculation ---
     lifetime_dhn = network.links.loc["heating grid", "lifetime"]
     network.remove("Link", "heating grid")
 
     loss, cap = dhn_eff_calc(network, basepath, REGION, RESULTS)
-    print(f"Loss: {loss}, Capacity: {cap}")
 
     network.add(
         "Link", "heating grid",
@@ -146,6 +145,7 @@ for scenario in scenarios:
         efficiency=1 - (loss / (network.loads_t.p_set["heat demand"] / network.loads_t.p_set["heat demand"].max() * cap)),
         lifetime=lifetime_dhn,
         p_nom_extendable=True,
+        marginal_cost=0,
     )
 
     # --- Constraints and Optimization ---
@@ -169,6 +169,12 @@ for scenario in scenarios:
     end = time()
     print(f"Elapsed time: {end - start:.5f} seconds")
 
+    # --- Results ---
+    print("Objective value:", network.objective)
+    print("SUM:", network.statistics.opex().sum() + network.statistics.capex().sum())
+    print("DHN:", network.model.variables["pw_link_capcost"].solution.item())
+    print("Objective Check:", network.objective - (network.statistics.opex().sum() + network.statistics.capex().sum()) - network.model.variables["pw_link_capcost"].solution.item())
+
     # --- Export Results ---
     network.export_to_csv_folder(os.path.join("./results", RESULTS))
 
@@ -183,6 +189,9 @@ for scenario in scenarios:
     print("CAPEX:\n", network.statistics.capex())
     print("Installed Capacity:\n", network.statistics.installed_capacity())
     print("Capacity Factor:\n", network.statistics.capacity_factor())
+
+    summary = create_summary_table(network)
+    summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=';', index=False)
 
     # --- Plots ---
     flow_plot(network, "district heat", 

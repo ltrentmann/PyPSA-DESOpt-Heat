@@ -1,9 +1,6 @@
 name,bus0,bus1,carrier,efficiency,build_year,lifetime,p_nom_extendable,p_nom_max,p_max_pu,p_min_pu,min_up_time,min_down_time,up_time_before,down_time_before,ramp_limit_up,ramp_limit_down,bus2,efficiency2,bus3,efficiency3,investment,fuel_costs,FOM,VOM,efficiency_ts,fuel_costs_ts,p_max_pu_ts,p_min_pu_ts,picewise_costs_func,p_nom_max_area,factor,description,capital_cost
-biomass boiler,district biomass,district heat,biomass boiler,1.14,0,25.0,True,0.0,1.0,0.0,0,0,1,0,,,,1.0,,,701825.9,0.0,33496.24,3.65,,,,,,,,data from DEA year 2030 wood chip HOP,78421.49339337001
 biomethane boiler,district biomethane,district heat,biomethane boiler,1.06,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,50000.0,0.0,2020.41,1.06,,,,,,,,data from DEA year 2020 gas boiler,5221.008139322729
 biomethane CHP,district biomethane,district elec,biomethane CHP,0.43,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,district heat,0.585,,,1276047.26,0.0,21267.4544,13.8238453,,,,,,,,,102949.74412087734
-biomethane CHP generator,district biomethane,district elec,biomethane CHP generator,0.43,0,25.0,True,0.0,1.0,0.0,0,0,1,0,,,,1.0,,,957035.45,0.0,9889.36628,7.44360903,,,,,,,,,71151.08389071781
-biomethane CHP boiler,district biomethane,district heat,biomethane CHP boiler,0.43,0,25.0,True,0.0,1.0,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,0.0,,,,,,,,,0.0
 large scale heat pump,district elec,district heat,heat pump,,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,810000.0,0.0,2126.75,1.8,COP central large tdhn 60 air,,,,,,,source water 10 degree data from DEA year 2020 10 MW,53976.439857028214
 geothermal plant,district elec,district heat,geothermal,25.0,0,30.0,True,0.0,1.0,0.7,0,0,1,0,,,,1.0,,,2650000.0,0.0,22437.16,6.23,,,,,,212200.0,5000.0,data from DEA 1200m,175686.92270420247
 heating grid,district heat,heat,heat,1.0,0,20.0,True,inf,,,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,0.0,,,normed demand,normed demand,costs_func_heat_grid,,,,0.0

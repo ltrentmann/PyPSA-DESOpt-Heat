@@ -2,8 +2,6 @@ name,bus,carrier,efficiency,build_year,lifetime,p_nom_extendable,p_nom_max,p_max
 pv panels,district elec,pv,1.0,0,40.0,True,inf,,0.0,0,0,1,0,380000.0,0.0,9500.0,0.0,,,0.0,pv panels,,212200.0,12260.0,,uitility scale ground mounted data from DEA year 2020 40 MW,28698.92594328044
 st panels,district heat,st,1.0,0,30.0,True,inf,,0.0,0,0,1,0,319011.82,0.0,60.4102041,0.31901182,,,0.0,st panels,,212200.0,1428.57,,,18508.895379509722
 electricity grid,district elec,grid electricity,1.0,0,50.0,True,inf,1.0,0.0,0,0,1,0,0.0,,22140.0,66.5,elec price vbw,,0.0,,,,,,stock exchange prices 2022 day-ahead ts,22140.0
-biomass,district biomass,biomass,1.0,0,50.0,True,inf,1.0,0.0,0,0,1,0,0.0,,0.0,0.0,wood chips price,,0.0,,,,,,wood chips,0.0
 biomethane,district biomethane,biomethane,1.0,0,50.0,True,inf,1.0,0.0,0,0,1,0,0.0,120.0,0.0,0.0,,,0.0,,,,,,treatment of biogas prices 2022 renewable raw materials from agriportance,0.0
 dec air heat pump,heat,dec air heat pump,,0,20.0,True,inf,,,0,0,1,0,906739.3736,215.15,17603.27801,0.0,,COP dec air sink55,0.0,normed demand,normed demand,,,,elec tarif bwp 2022 https://www.waermepumpe.de/politik/energiepreise/ data from DEA 2020 single EFH,84322.74821137253
-dec pellet boiler,heat,dec pellet boiler,0.9,0,20.0,True,0.0,,,0,0,1,0,209244.2287,,3743.553691,0.0,pellet price,,0.0,normed demand,normed demand,,,,wood pellets bagged goods data from DEA year 2020 single EFH,19140.110284909915
 dec ground heat pump,heat,dec ground heat pump,,0,20.0,True,39.802044,,,0,0,1,0,907997.7629,215.15,10722.53276,0.0,,COP dec ground12 sink55,0.0,normed demand,normed demand,,,,ground temp 10 degree data from DEA year 2020 singel EFH (ground water),77534.59744866133

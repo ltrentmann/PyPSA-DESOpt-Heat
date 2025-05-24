@@ -2,8 +2,6 @@ name,co2_emissions,color,nice_name
 heat,0.0,#c4071b,Hot Water for the District
 electricity,0.107,#CCCCCC,Electricity for the District
 grid electricity,0.107,#CCCCCC,Electricity from the grid
-household elec,0.107,#CCCCCC,Electricity for the Households
-biomass,0.027,#007c30,Biomass for the District
 biomethane,0.152,#679a1d,Biomethane for the District
 wind,0.0,#005293,Wind energy
 pv,0.0,#ffdc00,PV energy
@@ -13,10 +11,7 @@ TTES,0.0,#d64c13,TES
 PTES,0.0,#f9ba00,Seasonal thermal storage
 geothermal,0.0,#003359,Geothermal energy
 heat pump,0.0,#00778a,Large-scale Heat Pump
-biomass boiler,0.0,#007c30,Biomass boiler
-biomass CHP,0.0,#007c30,Biomass Combined Heat and Power
 biomethane boiler,0.0,#679a1d,Biomethane boiler
 biomethane CHP,0.0,#679a1d,Biomethane Combined Heat and Power
 dec air heat pump,0.107,#0065BD,Decentral air heat pump
-dec pellet boiler,0.036,#007c30,Decentral pellet boiler
 dec ground heat pump,0.107,#005293,Decentral ground heat pump
