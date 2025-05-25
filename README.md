@@ -10,7 +10,7 @@ PyPSA-DESOpt-Heat is a linear programming district energy system optimization mo
 * Sector-coupled district energy system optimization
   * Variable efficiency, price and demand timeseries
   * Greenfield and brownfield optimization
-* District heating network (DHN) build-out and building-specific heat supply
+* Cost-optimal decision between district heating network (DHN) build-out and building-specific heat supply
 * Plotting functions included
 
 ## Contents

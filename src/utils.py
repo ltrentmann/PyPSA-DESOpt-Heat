@@ -6,17 +6,44 @@ import CoolProp.CoolProp as CP
 from matplotlib.colors import LinearSegmentedColormap
 
 # === Global Variables ===
-COLOR_DICT = {
-    "geothermal plant": "#0f1b5f", "geothermal hp": "#0f1b5f", "st panels": "#d64c13",
-    "biomethane CHP": "#007c30",
-    "biomethane boiler": "#679a1d", "PTES charge": "#f9ba00", "PTES discharge": "#f9ba00",
-    "large scale heat pump": "#00778a", "pv panels": "#f9ba00", "battery storage": "#ffdc00",
-    "electricity grid": "#CCCCCC", "TTES": "#f9ba00", "PTES": "#f9ba00", "TTES charge": "#f9ba00", "TTES discharge": "#f9ba00",
-    "dec air heat pump": "#005293", "dec ground heat pump": "#0f1b5f", "dec pellet boiler": "#007c30", "elec boiler": "#CCCCCC"
-}
-
 mycmap = LinearSegmentedColormap.from_list('mycmap', ['#f9ba00', '#c4071b'])
 mycmap_dark = LinearSegmentedColormap.from_list('mycmap_dark', ['#0f1b5f', '#c4071b'])
+
+# === Color Dict ===
+def create_color_dict(network):
+    """
+    Create a dictionary mapping all component names in the network to their carrier colors.
+
+    Parameters
+    ----------
+    network : pypsa.Network
+        The PyPSA network object.
+
+    Returns
+    -------
+    dict
+        A dictionary mapping component names to carrier colors.
+    """
+    color_dict = {}
+    
+    # List of components that have a 'carrier' attribute
+    components_with_carrier = [
+        "generators", "loads", "links", "storage_units", "stores"
+    ]
+
+    for comp in components_with_carrier:
+        comp_df = getattr(network, comp, None)
+        if comp_df is None or 'carrier' not in comp_df.columns:
+            continue
+
+        for name, row in comp_df.iterrows():
+            carrier = row["carrier"]
+            if pd.notna(carrier) and carrier in network.carriers.index:
+                color = network.carriers.at[carrier, "color"]
+                if pd.notna(color):
+                    color_dict[name] = color
+
+    return color_dict
 
 # === Helper Functions ===
 def get_bus_flows(network, bus_name):
@@ -93,10 +120,13 @@ def flow_plot(network, bus_name, order, demand, title, folder):
         for comps in area_constraints.values()
     )
 
+    COLOR_DICT = create_color_dict(network)
+
     # Plot
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4), gridspec_kw={'width_ratios': [1, 1/3]})
     flows.resample('D').mean().plot(ax=ax1, kind='area', color=COLOR_DICT, alpha=0.8, linewidth=0)
 
+    COLOR_DICT = create_color_dict(network)
     if not flowsstorage.empty:
         flowsstorage.resample('D').mean().plot(ax=ax1, color=COLOR_DICT, alpha=0.8)
 
@@ -123,27 +153,22 @@ def flow_plot(network, bus_name, order, demand, title, folder):
     for i, pct in enumerate(percentages):
         x, y = autotexts[i].get_position()  # Original position
 
-        # Adjust distance based on size
-        if pct < 10:
-            y *= 0.9  # Move further left (more outside)
-        elif pct < 3:
-            x *= 1.1  # Slight left adjustment
-        elif 3 <= pct < 5:
-            x *= -0.9  # Slight right (more inside)
+        if pct < 5:
+            # Very small: move out and left
+            x *= 2.2  # push left
+            y *= 2
+        elif 5 <= pct < 7:
+            # Small: move out and right
+            x *= 2
+            y *= 2
+        elif pct < 10:
+            # Moderate: just move slightly out
+            x *= 2.2
+            y *= 2
 
         autotexts[i].set_position((x, y))
         autotexts[i].set_color("black")
 
-    '''percentages = sum_values / sum_values.sum() * 100
-    for i, (autotext, pct) in enumerate(zip(autotexts, percentages)):
-        x, y = autotext.get_position()
-        scale = 2 if pct < 10 else 1
-        autotext.set_position((x * scale, y * scale))
-        if pct < 4:
-            # Use the index i instead of lookup by text
-            shift = -0.2 if i % 2 == 0 else 0.2
-            autotext.set_position((autotext.get_position()[0] + shift, y))
-        autotext.set_color("black")'''
 
     if bus_name == "district heat":
         total_demand = network.loads_t.p_set["heat demand"].sum()
@@ -169,6 +194,7 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
         if network.stores.at[store, 'bus'] == bus_name:
             storage_energy[store] = network.stores_t.e[store]
 
+    COLOR_DICT = create_color_dict(network)
     fig, (ax, ax2) = plt.subplots(1, 2, figsize=(12, 4), gridspec_kw={'width_ratios': [1, 1/3]})
     storage_energy.resample('D').mean().plot(ax=ax, linewidth=2, color=[COLOR_DICT.get(col, '#CCCCCC') for col in storage_energy.columns])
 

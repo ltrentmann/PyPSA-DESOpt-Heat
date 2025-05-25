@@ -3,7 +3,7 @@
 @author: Lennart Trentmann (lennart.trentmann@tum.de); Amedeo Ceruti
 (amedeo.ceruti@tum.de)
 
-This file is used to optimize district energy systems with the tool district_pypsa
+This file is used to optimize district energy systems with the tool PyPSA-DESOpt-Heat
 of the Chair of Energy Systems (TUM) based on PyPSA from TU Berlin.
 """
 
