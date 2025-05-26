@@ -31,7 +31,7 @@ pypsa.optimization.optimize.logger.setLevel(logging.INFO)
 
 # -------------------- Scenario Setup --------------------
 scenarios = [
-    {"REGION": "region_60-45", "RESULTS": "region_60-45", "temp_h": 60, "temp_c": 45},
+    {"REGION": "region_60-45", "RESULTS": "region_60-45"},
     # Add more scenarios as needed
 ]
 
@@ -39,8 +39,6 @@ scenarios = [
 for scenario in scenarios:
     REGION = scenario["REGION"]
     RESULTS = scenario["RESULTS"]
-    temp_h = scenario["temp_h"]
-    temp_c = scenario["temp_c"]
 
     print(f"Running scenario: {REGION}")
 
@@ -59,6 +57,8 @@ for scenario in scenarios:
     CO2_PRICE = float(params['CO2_PRICE'])
     CO2_LIMIT = float(params['CO2_LIMIT'])
     HOURS = int(params['HOURS'])
+    TEMP_SUP = float(params['TEMP_SUP'])
+    TEMP_RET = float(params['TEMP_RET'])
 
     # --- CAPEX Calculation ---
     for file in os.listdir(network_folder):
@@ -215,8 +215,8 @@ for scenario in scenarios:
               ["battery storage", "pv panels", "electricity grid", "biomethane CHP"],
               "", "electricity supply", REGION)
 
-    plot_storage_energy(network, "PTES", REGION, temp_h, temp_c)
-    plot_storage_energy(network, "TTES", REGION, temp_h, temp_c)
+    plot_storage_energy(network, "PTES", REGION, TEMP_SUP, TEMP_RET)
+    plot_storage_energy(network, "TTES", REGION, TEMP_SUP, TEMP_RET)
 
     # --- End of Scenario ---
     print(f"Scenario '{REGION}' completed.\n")

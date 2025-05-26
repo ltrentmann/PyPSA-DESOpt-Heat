@@ -15,6 +15,7 @@ from src.calc import solar
 from src.calc import district_heating as dh
 from src.calc import heat_pump as hp
 from src.calc import wind as wind
+from src.calc import thermal_energy_storage as tes
 
 # Suppress FutureWarnings
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -56,7 +57,7 @@ def cutout(lat, lon, filename):
         dt=RESOLUTION,
         parallel=True,
     )
-    c.prepare(monthly_requests=True)
+    # c.prepare(monthly_requests=True)
     return c
 
 
@@ -118,13 +119,25 @@ def time_series():
         cops_dec[f'COP-dec-air-sink{t_sink}'] = hp.cop_decentral(delta_temp=delta_air, source='air')
         cops_dec[f'COP-dec-ground-sink{t_sink}'] = hp.cop_decentral(delta_temp=delta_ground, source='soil')
 
-        cops_dec[f'COP-dec-air-atlite-sink{t_sink}'] = hp.cop_decentral_atlite(ds, source='air', temp_sink=t_sink)
-        cops_dec[f'COP-dec-ground-atlite-sink{t_sink}'] = hp.cop_decentral_atlite(ds, source='ground', temp_sink=t_sink)
-
         df_cop = pd.DataFrame.from_dict(cops_dec)
         results['cop-decentral'] = df_cop
         df_cop.to_csv(RESULTSPATH + f"cop-dec-sink{t_sink}.csv")
         print(RESULTSPATH + f"cop-sink{t_sink}.csv")
+    
+    # Standing losses thermal energy storage
+    df_sto = pd.read_csv(DATAPATH + 'thermal-energy-storage.csv', **CSV)
+    # Create an empty DataFrame to collect all results
+    combined_losses = pd.DataFrame()
+
+    for storage in df_sto.index:
+        row = df_sto.loc[storage]
+        id_ = row['id']
+        
+        loss_series = tes.standing_loss(row, results['irradiation']["temperature"]-273.15)
+        combined_losses[id_] = loss_series
+
+    combined_losses.to_csv(RESULTSPATH + "standing-losses-all.csv")
+    print(RESULTSPATH + "standing-losses-all.csv")
 
     # Central DH Network and Large Heat Pump COPs
     df_nets = pd.read_csv(DATAPATH + 'heat-sources.csv', skiprows=[1], header=0, **CSV)
@@ -139,19 +152,12 @@ def time_series():
         )
         results[f'T_network-{id_}'].to_csv(RESULTSPATH + f"T_network-{id_}.csv")
 
-        results[f'cop-large-{id_}'] = hp.cop_central(
-            temp_supply=copy.deepcopy(results[f'T_network-{id_}']),
-            temp_source=df_nets.loc[i, 'T_source'],
-            quality_grade=QUALITYGRADE
-        )
-
         results[f'cop-jesper-{id_}'] = hp.cop_jesper(
             df_sink=copy.deepcopy(results[f'T_network-{id_}']),
             temp_source=df_nets.loc[i, 'T_source'],
             df_model=pd.read_csv("./data/jesper_model.csv", header=0, sep=",", index_col=1)
         )
 
-        results[f'cop-large-{id_}'].to_csv(RESULTSPATH + f"cop-central-carnot-{id_}.csv")
         results[f'cop-jesper-{id_}'].to_csv(RESULTSPATH + f"cop-central-jesper-{id_}.csv")
 
     print(RESULTSPATH + "T_network.csv")

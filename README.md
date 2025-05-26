@@ -11,7 +11,7 @@ PyPSA-DESOpt-Heat is a linear programming district energy system optimization mo
   * Variable efficiency, price and demand timeseries
   * Greenfield and brownfield optimization
 * Cost-optimal decision between district heating network (DHN) build-out and building-specific heat supply
-* Plotting functions included
+* Preprocessing functions included for timeseries calcuation of COPs, PV, ST and standing losses of TES
 
 ## Contents
 
@@ -39,10 +39,11 @@ The cost function for the district heating network (DHN) can be calculated using
 For more details, visit the [topotherm GitHub repository](https://github.com/jylambert/topotherm) or refer to the original research paper:
 > Lambert, Jerry and Ceruti, Amedeo and Spliethoff, Hartmut, Benchmark of Mixed-Integer Linear Programming Formulations for District Heating Network Design. Energy, Volume 308, 2024, 132885, ISSN 0360-5442, https://doi.org/10.1016/j.energy.2024.132885
 
-
 For a more detailed description of the PyPSA components, refer to the [PyPSA Documentation](https://pypsa.readthedocs.io/) or consult the following publication:
 
 > T. Brown, J. Hörsch, D. Schlachtberger, *PyPSA: Python for Power System Analysis*, Journal of Open Research Software, 6(1), 2018. DOI: [10.5334/jors.188](https://doi.org/10.5334/jors.188). Available at [arXiv:1707.09913](https://arxiv.org/abs/1707.09913).
+
+If generation timeseries of renewables like, PV, ST or COPs and standing loss timeseries of TES are needed run `preprocessing_ts.py`
 
 
 ## Installation
@@ -83,3 +84,8 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Below is an example visualization of district heating network heat supply:
 
 ![dhn_heat_supply](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/results/grch_60-45/district%20heat_grch_60-45_flow.svg "dhn_heat_supply")
+
+## ToDos:
+
+- Potentials heatpump
+- Storage timeseries standinglosses

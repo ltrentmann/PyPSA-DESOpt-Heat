@@ -1,0 +1,5 @@
+index,id,temp_h,temp_c,height,diameter,s_iso,lamb_iso,alpha_inside,alpha_outside
+0,TTES60-45,60,45,50,30,50,0.03,1,1
+1,TTES70-50,70,50,50,30,50,0.03,1,1
+2,TTES80-55,80,55,50,30,50,0.03,1,1
+3,TTES90-60,90,60,50,30,50,0.03,1,1
