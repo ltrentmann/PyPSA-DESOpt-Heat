@@ -31,7 +31,7 @@ pypsa.optimization.optimize.logger.setLevel(logging.INFO)
 
 # -------------------- Scenario Setup --------------------
 scenarios = [
-    {"REGION": "grch_60-45", "RESULTS": "grch_60-45", "temp_h": 60, "temp_c": 45},
+    {"REGION": "region_60-45", "RESULTS": "region_60-45", "temp_h": 60, "temp_c": 45},
     # Add more scenarios as needed
 ]
 
@@ -194,6 +194,14 @@ for scenario in scenarios:
     summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=';', index=False)
 
     # --- Plots ---
+    # Adapt components which should be plotted #
+    # Input: - network: PyPSA Network object
+    #        - bus: str, type of plot (e.g., "district heat", "heat", "district elec")
+    #        - components: list of str, components to plot
+    #        - title: str, title of the plot
+    #        - ylabel: str, y-axis label
+    #        - region: str, region name for saving the plot
+
     flow_plot(network, "district heat", 
               ["geothermal plant", "geothermal hp", "st panels", "large scale heat pump", "biomethane CHP", 
                "biomethane boiler", "TTES discharge", "PTES discharge", "elec boiler"],

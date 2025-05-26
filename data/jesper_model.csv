@@ -1,0 +1,3 @@
+index,hp_type,T_sink_out_low,T_sink_out_high,a,b,c,d
+0,conventional,0,100,1.4480E12,88.730,-4.9460,0.0000
+1,very high temperature,100,160,1.9118,-0.89094,0.67895,0.044189

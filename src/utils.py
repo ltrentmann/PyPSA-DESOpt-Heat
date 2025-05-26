@@ -1,6 +1,7 @@
 import os
 import math
 import pandas as pd
+import copy
 import matplotlib.pyplot as plt
 import CoolProp.CoolProp as CP
 from matplotlib.colors import LinearSegmentedColormap
@@ -8,6 +9,77 @@ from matplotlib.colors import LinearSegmentedColormap
 # === Global Variables ===
 mycmap = LinearSegmentedColormap.from_list('mycmap', ['#f9ba00', '#c4071b'])
 mycmap_dark = LinearSegmentedColormap.from_list('mycmap_dark', ['#0f1b5f', '#c4071b'])
+
+def capacities(lon, lat, capacity=1):
+    """Initializes a dataframe for a location in a cutout and returns a 
+    dataframe to pass to layout_from_capacity_list.
+    
+    Args:
+        lon (float): longitude of the location
+        lat (float): latitude of the location
+        capacity (float): capacity of the plant in kW
+    Returns:
+        df (pd.DataFrame): dataframe with capacities
+    """
+    df = pd.DataFrame.from_dict({'index': 0, 'x': lon, 'y': lat, 'Capacity': capacity}, orient='index').T
+    return df
+
+def create_dir(path):
+    """Creates a directory if it does not exist and deletes old results.
+    
+    Args:
+        path (str): path to directory
+    """
+    # create results directory
+    if not os.path.exists(path):
+        os.makedirs(path)
+    else:
+        # delete old results
+        for f in os.listdir(path):
+            os.remove(os.path.join(path, f))
+    return
+
+def merge_dfs(results):
+    """Merge all DataFrames in results to a single DataFrame. Drops duplicates
+    in a list of column names and renames the rest of the duplicated column
+     names to avoid duplicates.
+     
+     Args:
+         results (dict): dictionary with results in DataFrames with the same
+             datetime index.
+     Returns:
+         df (pd.DataFrame): merged DataFrame
+    """
+    # list of duplicate cols to drop (which are the same values)
+    drop_duplicates = ["x", "y", "lat", "lon", "temperature"]
+    # dict keys to skip
+    skip_items = ["T_network"]
+
+    d = copy.deepcopy(results)
+    df = pd.DataFrame()
+    for key in d.keys():
+        if key in skip_items:
+            continue
+        # check if any columns are in drop duplicates and df, if yes, drop them
+        if type(d[key]) == pd.Series:
+            d[key] = pd.DataFrame(d[key])
+        
+        cols_drop = d[key].columns.isin(drop_duplicates)
+        if cols_drop.any() & df.columns.isin(drop_duplicates).any():
+            d[key].drop(columns=d[key].columns[cols_drop], inplace=True)
+
+        # rename rest of columns to avoid duplicates
+        cols_to_rename = d[key].columns[d[key].columns.isin(df.columns)]
+        if cols_to_rename.any():
+            # if yes, add a suffix to the column name for which it is true
+            for k in cols_to_rename:
+                d[key].rename(columns={k: k + '-' + key},
+                                    inplace=True)
+
+        # merge the dataframes
+        df = pd.concat([df, d[key]], axis=1)
+
+    return df
 
 # === Color Dict ===
 def create_color_dict(network):

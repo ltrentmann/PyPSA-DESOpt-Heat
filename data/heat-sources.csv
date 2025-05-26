@@ -1,0 +1,6 @@
+index,id,T_suphigh,T_suplow,T_turnhigh,T_return,T_turnlow,Q_th,m_dot,T_source,T_returnmin,
+descr,identifier,maximal dhn temperature,minimal dhn temperature,ambient temperature at which T_suphigh is reached (in C),return temperature of dhn,ambient temperature at which T_suplow is reached (in C),maximal thermal power (in kW or None),maximal mass flow (in l/s or None),heat source temperature in C,minimal return temperature of the heat source (in C),
+0,tdhn_90_ground,90,75,20,55,-15,,,12,8,ground
+1,tdhn_80_ground,80,65,20,50,-15,,,12,8,ground
+2,tdhn_70_ground,70,60,20,50,-15,,,12,8,ground
+3,tdhn_60_ground,60,60,20,45,-15,,,12,8,ground
