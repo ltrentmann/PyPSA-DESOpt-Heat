@@ -88,4 +88,5 @@ Below is an example visualization of district heating network heat supply:
 ## ToDos:
 
 - Potentials heatpump
-- Storage timeseries standinglosses
+- Storage timeseries standinglosses PTES REGWA
+- Soil temperature atlite for central hp

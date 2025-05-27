@@ -4,3 +4,7 @@ descr,identifier,maximal dhn temperature,minimal dhn temperature,ambient tempera
 1,tdhn_80_ground,80,80,20,55,-15,,,12,8
 2,tdhn_70_ground,70,70,20,50,-15,,,12,8
 3,tdhn_60_ground,60,60,20,45,-15,,,12,8
+4,tdhn_90_air,90,90,20,60,-15,,,air,8
+5,tdhn_80_air,80,80,20,55,-15,,,air,8
+6,tdhn_70_air,70,70,20,50,-15,,,air,8
+7,tdhn_60_air,60,60,20,45,-15,,,air,8

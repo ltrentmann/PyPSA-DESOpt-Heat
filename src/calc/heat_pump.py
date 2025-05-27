@@ -113,36 +113,40 @@ def cop_jesper(df_sink, temp_source, df_model):
     """
     Calculate COP using Jesper et al.'s model based on DHN supply temp and source temp.
 
-    Paper:
-    Jesper et al., 2021. "Large-scale heat pumps: Uptake and performance modelling of market-available devices".
-    Renewable and Sustainable Energy Reviews, 137, 110646. https://doi.org/10.1016/j.rser.2020.110646
-
     Args:
         df_sink (pd.DataFrame): Contains the column 'T_supply' for sink temperatures (in °C).
-        temp_source (float): Constant source temperature (in °C).
+        temp_source (float or pd.Series): Source temperature in °C (can be time series).
         df_model (pd.DataFrame): Parameter set indexed by HP type.
 
     Returns:
         pd.DataFrame: Updated df_sink with columns 'COP', 'Delta T', and 'T_source'.
     """
     T_sink_out = df_sink["T_supply"]
-    Delta_T_lift = abs(T_sink_out - temp_source)
 
-    # Classify the heat pump type based on the sink temp range
+    # Support time series source temperature
+    if isinstance(temp_source, (pd.Series, np.ndarray)):
+        temp_source_series = temp_source
+    else:
+        # Force conversion to float
+        temp_source_val = float(temp_source)
+        temp_source_series = pd.Series(temp_source_val, index=T_sink_out.index)
+
+    Delta_T_lift = abs(temp_source_series - T_sink_out)
+
+    # Classify the HP type based on the max sink temp (still static)
     hp_type = classify_hp(T_sink_out.max(), df_model)
     if hp_type is None:
         raise ValueError("Source and sink temperatures do not match any defined HP type.")
 
     parameters = df_model.loc[hp_type]
-    T_sink_out_K = T_sink_out + 273.15  # Convert to Kelvin for model input
 
     if hp_type == "conventional":
-        cop = conventional(Delta_T_lift, T_sink_out_K, parameters)
+        cop = conventional(Delta_T_lift, T_sink_out + 273.15, parameters)
         outside = (Delta_T_lift < 10) | (Delta_T_lift > 78)
         if outside.any():
             warnings.warn("Temperature lift out of range for 'conventional' model.")
     elif hp_type == "very high temperature":
-        cop = very_high(Delta_T_lift, T_sink_out_K, parameters)
+        cop = very_high(Delta_T_lift, T_sink_out + 273.15, parameters)
         outside = (Delta_T_lift < 25) | (Delta_T_lift > 95)
         if outside.any():
             warnings.warn("Temperature lift out of range for 'very high temperature' model.")
@@ -151,8 +155,8 @@ def cop_jesper(df_sink, temp_source, df_model):
 
     df_sink["COP"] = cop
     df_sink["Delta T"] = Delta_T_lift
-    df_sink["T_source"] = temp_source
+    df_sink["T_source"] = temp_source_series
     df_sink.rename(columns={"T_supply": "T_sink"}, inplace=True)
 
     return df_sink
-
+    
