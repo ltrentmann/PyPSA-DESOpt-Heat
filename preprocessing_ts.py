@@ -132,7 +132,6 @@ def time_series():
     for storage in df_sto.index:
         row = df_sto.loc[storage]
         id_ = row['id']
-        
         loss_series = tes.standing_loss(row, results['irradiation']["temperature"]-273.15)
         combined_losses[id_] = loss_series
 
