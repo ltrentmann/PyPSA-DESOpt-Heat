@@ -1,3 +1,12 @@
+"""
+Module to calculate the district heating gird.
+
+Authors:
+- Lennart Trentmann (lennart.trentmann@tum.de)
+- Amedeo Ceruti (amedeo.ceruti@tum.de)
+- Jerry Lambert (jerry.lambert@tum.de)
+"""
+
 import numpy as np
 import iapws.iapws97
 import pandas as pd
@@ -98,3 +107,4 @@ def heat_flow(m_dot, temp_in, temp_out, pressure=1.01325):
     Q_th = m_dot * (water_out.h - water_in.h)
 
     return abs(Q_th) / 1e3  # Convert W to kW
+

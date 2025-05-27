@@ -84,9 +84,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 Below is an example visualization of district heating network heat supply:
 
 ![dhn_heat_supply](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/results/region_60-45/district%20heat_grch_60-45_flow.svg "dhn_heat_supply")
-
-## ToDos:
-
-- Potentials heatpump
-- Storage timeseries standinglosses PTES REGWA
-- Soil temperature atlite for central hp

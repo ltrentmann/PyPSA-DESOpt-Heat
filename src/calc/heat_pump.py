@@ -57,6 +57,23 @@ def max_heat_power(Q_source, cop):
     """
     return Q_source * cop / (cop - 1)
 
+def max_elec_power(Q_source, cop):
+    """
+    Compute the maximum elec input power of a heat pump.
+
+    Based on the equation:
+        COP = Q_out / (Q_out - Q_in)
+        → Q_out = Q_in * COP / (COP - 1)
+
+    Args:
+        Q_source (float or np.ndarray): Available heat input in kW.
+        cop (float or np.ndarray): Coefficient of performance.
+
+    Returns:
+        float or np.ndarray: Maximum thermal output power in kW.
+    """
+    return cop / (cop - 1) / cop * Q_source
+
 
 def classify_hp(T_sink_out, parameters):
     """

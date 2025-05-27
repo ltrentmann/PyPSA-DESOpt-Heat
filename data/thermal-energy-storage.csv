@@ -1,5 +1,9 @@
-index,id,temp_h,temp_c,height,diameter,s_iso,lamb_iso,alpha_inside,alpha_outside
-0,TTES60-45,60,45,50,30,50,0.03,1,1
-1,TTES70-50,70,50,50,30,50,0.03,1,1
-2,TTES80-55,80,55,50,30,50,0.03,1,1
-3,TTES90-60,90,60,50,30,50,0.03,1,1
+index,id,type,temp_h,temp_c,height,diameter,s_iso,lamb_iso,alpha_inside,alpha_outside,U_top,U_side,U_bottom,aspect_ratio,volume
+0,TTES60-45,TTES,60,45,50,30,50,0.03,1,1,,,,,
+1,TTES70-50,TTES,70,50,50,30,50,0.03,1,1,,,,,
+2,TTES80-55,TTES,80,55,50,30,50,0.03,1,1,,,,,
+3,TTES90-60,TTES,90,60,50,30,50,0.03,1,1,,,,,
+4,PTES60-45,PTES,60,45,,,,,,,0.15,0.16,0.1,0.5,50000
+5,PTES70-50,PTES,70,50,,,,,,,0.15,0.16,0.1,0.5,50000
+6,PTES80-55,PTES,80,55,,,,,,,0.15,0.16,0.1,0.5,50000
+7,PTES90-60,PTES,90,60,,,,,,,0.15,0.16,0.1,0.5,50000

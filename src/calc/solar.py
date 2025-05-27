@@ -133,6 +133,7 @@ def irradiation(cutout, orientation, lat, lon):
     res['influx_toa'] = ds["influx_toa"].squeeze().to_series()
     res['ghi'] = res['influx_direct'] + res['influx_diffuse']  # Global Horizontal Irradiance
     res['temperature'] = ds.temperature.squeeze().to_series()
+    res['soil temperature'] = ds["soil temperature"].squeeze().to_series()
 
     # Calculate DNI using atlite
     sp = atlite.convert.SolarPosition(ds)

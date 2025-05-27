@@ -17,6 +17,7 @@ from src.calc import heat_pump as hp
 from src.calc import wind as wind
 from src.calc import thermal_energy_storage as tes
 
+
 # Suppress FutureWarnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 
@@ -132,7 +133,10 @@ def time_series():
     for storage in df_sto.index:
         row = df_sto.loc[storage]
         id_ = row['id']
-        loss_series = tes.standing_loss(row, results['irradiation']["temperature"]-273.15)
+        if df_sto.loc[storage, 'type'] == 'PTES':
+            loss_series = tes.standing_loss_PTES(row, results['irradiation']["temperature"]-273.15)
+        elif df_sto.loc[storage, 'type'] == 'TTES':
+            loss_series = tes.standing_loss_TTES(row, results['irradiation']["temperature"]-273.15)
         combined_losses[id_] = loss_series
 
     combined_losses.to_csv(RESULTSPATH + "standing-losses-all.csv")
@@ -154,6 +158,14 @@ def time_series():
         # Determine the correct source temperature input
         if df_nets.loc[i, 'T_source'] == "air":
             source_temp_series = pd.to_numeric(results["irradiation"]["temperature"], errors='coerce') - 273.15
+            cop_result = hp.cop_jesper(
+                df_sink=copy.deepcopy(results[f'T_network-{id_}']),
+                temp_source=source_temp_series,
+                df_model=pd.read_csv("./data/jesper_model.csv", header=0, sep=",", index_col=1)
+            )
+            results[f'cop-jesper-air-{id_}'] = cop_result
+        elif df_nets.loc[i, 'T_source'] == "ground":
+            source_temp_series = pd.to_numeric(results["irradiation"]["soil temperature"], errors='coerce') - 273.15
             cop_result = hp.cop_jesper(
                 df_sink=copy.deepcopy(results[f'T_network-{id_}']),
                 temp_source=source_temp_series,
@@ -213,11 +225,18 @@ def potentials():
     Currently includes max heat flow and maximum HP output.
     """
     pots = {}
-    pots['Q_source'] = dh.heat_flow(m_dot=130, temp_in=57, temp_out=35, pressure=1.01325)
-    pots['Q_max_HP'] = hp.max_heat_power(Q_source=pots['Q_source'], cop=4)
+    pots['Q_source_60-45'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=45, pressure=1.01325)
+    pots['Q_source_70-50'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=50, pressure=1.01325)
+    pots['Q_source_80-55'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=55, pressure=1.01325)
+    pots['Q_source_90-60'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=60, pressure=1.01325)
+    pots['Q_max_geo_60-45'] = hp.max_elec_power(Q_source=pots['Q_source_60-45'], cop=25)
+    pots['Q_max_geo_70-50'] = hp.max_elec_power(Q_source=pots['Q_source_70-50'], cop=25)
+    pots['Q_max_geo_80-55'] = hp.max_elec_power(Q_source=pots['Q_source_80-55'], cop=25)
+    pots['Q_max_geo_90-60'] = hp.max_elec_power(Q_source=pots['Q_source_90-60'], cop=25)
 
-    # Future extensions:
-    # pots['heat-pump'] = geothermal_potential(lat, lon)
+    pots_df = pd.DataFrame.from_dict(pots, orient='index', columns=['Value'])
+    pots_df.to_csv(RESULTSPATH + "potentials.csv", sep=";", decimal=".", index_label='Potentials')
+    
     return pots
 
 
