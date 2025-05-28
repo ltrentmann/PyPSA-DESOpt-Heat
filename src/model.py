@@ -132,36 +132,11 @@ def dhn_eff_calc(network, basepath, REGION, RESULTS):
     # Daily mean efficiency
     efficiency_daily = efficiency_df.resample("1D").mean()
 
-    # Plot daily efficiency for all capacities using colormap
-    plt.figure(figsize=(6, 6))
-
-    n_lines = len(efficiency_daily.columns)
-    for i, col in enumerate(efficiency_daily.columns):
-        color = mycmap(i / (n_lines - 1))  # Normalized to [0, 1]
-        plt.plot(efficiency_daily.index, efficiency_daily[col], label=col, linewidth=1.5, color=color)
-
-    plt.xlabel("Date")
-    plt.ylabel("Efficiency (daily mean)")
-    plt.title(f"{REGION} – Daily Avg Efficiency per Capacity")
-    # Move legend below the plot
-    plt.legend(
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.2),
-        fontsize=11,
-        ncol=4,  # Adjust number of columns depending on number of labels
-        frameon=False
-    )
-    plt.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(basepath, "results", RESULTS, f"efficiency_time_series_daily_{REGION}.svg"))
-    plt.close()
-
-
     # Plot average efficiency across capacities
     efficiency_avg = efficiency_daily.mean(axis=1)
 
     plt.figure(figsize=(6, 6))
-    plt.plot(efficiency_avg.index, efficiency_avg, color=mycmap_dark(0.5), linewidth=2.5, label="Avg Efficiency")
+    plt.plot(efficiency_avg.index, efficiency_avg, color=mycmap_dark(0), linewidth=2.5, label="Avg Efficiency")
     plt.xlabel("Date")
     plt.ylabel("Avg Efficiency (daily mean)")
     plt.title(f"{REGION} – Average Daily Efficiency")

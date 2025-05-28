@@ -187,8 +187,6 @@ for scenario in scenarios:
 
     print("\nOPEX:\n", network.statistics.opex())
     print("CAPEX:\n", network.statistics.capex())
-    print("Installed Capacity:\n", network.statistics.installed_capacity())
-    print("Capacity Factor:\n", network.statistics.capacity_factor())
 
     summary = create_summary_table(network)
     summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=';', index=False)
