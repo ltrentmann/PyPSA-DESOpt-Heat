@@ -103,11 +103,8 @@ The required technology data parameters must be specified in the relevant CSV fi
     ```bash
     git clone https://github.com/<your-username>/PyPSA-DESOpt-Heat.git
     cd PyPSA-DESOpt-Heat
-2. Install the package in editable mode: 
 
-    ```bash
-    pip install -e .
-3. Create and activate a virtual environment. For example, using Anaconda:
+2. Create and activate a virtual environment. For example, using Anaconda:
 
    ```bash
    conda env create -f environment.yml
