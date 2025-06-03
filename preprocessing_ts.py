@@ -244,13 +244,13 @@ if __name__ == "__main__":
     print('============================')
     print('Performing preprocessing...')
     print('============================\n')
-
-    print('============================')
-    print(f"Processing year: {YEAR}")
-    print('============================')
-
-    res = time_series()
-    df = merge_dfs(res)
-    df.to_csv(RESULTSPATH + "all-time-series.csv", sep=";", decimal=",")
-    test = potentials()
-    print(test)
+    years = [str(year) for year in range(1960, 2024)] 
+    for YEAR in years:
+        print('============================')
+        print(f"Processing year: {YEAR}")
+        print('============================')
+        res = time_series()
+        df = merge_dfs(res)
+        df.to_csv(RESULTSPATH + "all-time-series.csv", sep=";", decimal=",")
+        test = potentials()
+        print(test)
