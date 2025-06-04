@@ -3,7 +3,7 @@ biomethane boiler,district biomethane,district heat,biomethane boiler,1.06,0,25.
 biomethane CHP,district biomethane,district elec,biomethane CHP,0.43,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,district heat,0.585,,,1276047.26,0.0,21267.4544,13.8238453,,,,,,,,,102949.74412087734
 large scale heat pump,district elec,district heat,heat pump,,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,810000.0,0.0,2126.75,1.8,COP central large tdhn 60 air,,,,,,,source water 10 degree data from DEA year 2020 10 MW,53976.439857028214
 geothermal plant,district elec,district heat,geothermal,25.0,0,30.0,True,0.0,1.0,0.7,0,0,1,0,,,,1.0,,,2650000.0,0.0,22437.16,6.23,,,,,,212200.0,5000.0,data from DEA 1200m,175686.92270420247
-heating grid,district heat,heat,heat,1.0,0,20.0,True,inf,,,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,0.0,,,normed demand,normed demand,costs_func_heat_grid,,,,0.0
+heating grid,district heat,heat,heat,1.0,0,20.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,0.0,,,,,costs_func_heat_grid,,,,0.0
 TTES charge,district heat,TTES,TTES,1.0,0,20.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,18000.0,0.0,0.0,20.0,,,,,,,,,1324.4715059153193
 TTES discharge,TTES,district heat,TTES,1.0,0,20.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,18000.0,0.0,0.0,20.0,,,,,,,,,1324.4715059153193
 elec boiler,district elec,district heat,electricity,0.99,0,25.0,True,inf,1.0,0.0,0,0,1,0,,,,1.0,,,150000.0,0.0,1084.64,1.06,,,,,,,,,10686.434417968188

@@ -75,6 +75,7 @@ for scenario in scenarios:
     df_timeseries.index = pd.to_datetime(df_timeseries.index, format='%d.%m.%Y %H:%M')
     df_timeseries["st panels"] /= 700  # Convert Wh/m² to MWh/MW
     network.set_snapshots(df_timeseries.index.values)
+    df_timeseries["normed demand"] = df_timeseries["heat demand"] / df_timeseries["heat demand"].max()
 
     # --- Load and Import Network Components ---
     def load_and_import(file_name, component):
@@ -145,7 +146,7 @@ for scenario in scenarios:
         efficiency=1 - (loss / (network.loads_t.p_set["heat demand"] / network.loads_t.p_set["heat demand"].max() * cap)),
         lifetime=lifetime_dhn,
         p_nom_extendable=True,
-        marginal_cost=0,
+        # marginal_cost=-103.36,
     )
 
     # --- Constraints and Optimization ---
@@ -161,11 +162,20 @@ for scenario in scenarios:
     pypsatopo.generate(network, file_output = "diagrams/network.svg", file_format = "svg")
 
     start = time()
+
+    """network.optimize.add_load_shedding(
+        buses=["district heat"],
+        marginal_cost=100,    # High cost to ensure shedding is last resort
+        p_nom=10,              # Maximum allowed shedding (MW)
+        sign=1,
+    )"""
+
     network.optimize(
         solver_name='gurobi',
         solver_options={"MIPGap": 0.001, "FeasibilityTol": 1e-4},
         extra_functionality=extra_functionalities
     )
+
     end = time()
     print(f"Elapsed time: {end - start:.5f} seconds")
 

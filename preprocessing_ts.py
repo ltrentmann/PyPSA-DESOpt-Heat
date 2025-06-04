@@ -244,11 +244,13 @@ if __name__ == "__main__":
     print('============================')
     print('Performing preprocessing...')
     print('============================\n')
-    years = [str(year) for year in range(1960, 2024)] 
+    years = [str(year) for year in range(2022, 2023)] 
     for YEAR in years:
         print('============================')
         print(f"Processing year: {YEAR}")
         print('============================')
+        PATHCUTOUT = f'./data/years/region-{YEAR}.nc'
+        RESULTSPATH = f'./results/preprocessing/region-{YEAR}/'
         res = time_series()
         df = merge_dfs(res)
         df.to_csv(RESULTSPATH + "all-time-series.csv", sep=";", decimal=",")

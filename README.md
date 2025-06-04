@@ -104,11 +104,15 @@ The required technology data parameters must be specified in the relevant CSV fi
     git clone https://github.com/<your-username>/PyPSA-DESOpt-Heat.git
     cd PyPSA-DESOpt-Heat
 
-2. Create and activate a virtual environment. For example, using Anaconda:
+2. Create and activate a virtual environment for PyPSA-DESOpt-Heat and preprocessing. For example, using Anaconda:
 
    ```bash
-   conda env create -f environment.yml
-   conda activate PyPSADESOptHeat
+   conda env create -f env_main.yml
+   conda activate PyPSA-DESOpt-Heat-main
+
+   conda env create -f env_preprocessing.yml
+   conda activate PyPSA-DESOpt-Heat-preprocessing
+
 ## Solver
 
 We recommend using gurobi, which offers free academic licenses. For installation instructions, see the [installation guide](https://support.gurobi.com/hc/en-us/articles/360044290292-How-do-I-install-Gurobi-for-Python-).
