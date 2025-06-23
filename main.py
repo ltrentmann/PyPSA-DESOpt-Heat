@@ -153,6 +153,7 @@ for scenario in scenarios:
     def extra_functionalities(network, snapshots):
         add_area_constraint(network, snapshots, df_generators, df_links, df_stores, df_storageunits)
         add_piecewise_cost_link(network, snapshots, basepath, network_folder, INTEREST, RESULTS)
+        enforce_min_store_if_built(network, snapshots, df_stores)
 
     network.add("GlobalConstraint", "co2_limit", sense="<=", constant=CO2_LIMIT)
 

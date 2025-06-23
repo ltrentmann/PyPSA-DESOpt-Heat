@@ -209,3 +209,38 @@ def add_piecewise_cost_link(n, snapshots, basepath, network_folder, INTEREST, RE
     plt.savefig(f"./results/{RESULTS}/cost_curve_adjustment.svg")
 
     m.objective += capcost
+    
+# -------------------------
+# Store Minimum Capacity Enforcement
+# -------------------------
+def enforce_min_store_if_built(n, snapshots, df_stores):
+    stores = n.stores[n.stores.e_nom_extendable].index
+
+    if stores.empty:
+        return
+
+    e_nom = n.model.variables["Store-e_nom"]
+
+    min_caps = df_stores.loc[stores, "e_nom_min_cap"].to_dict()
+    min_caps = {store: cap for store, cap in min_caps.items() if not pd.isna(cap)}
+    
+    big_M = 1e9
+
+    # Add binary variables for store build decision
+    build_var = n.model.add_variables(name="store_build", binary=True)
+
+    for store in stores:
+        if store not in min_caps:
+            continue
+
+        # Access as expressions
+        e = e_nom[store]
+        b = build_var[store]
+
+        # Constraint 1: e_nom - big_M * build <= 0
+        c_max = e - big_M * b <= 0
+        n.model.add_constraints(c_max, name=f"store_big_M_upper_{store}")
+
+        # Constraint 2: min_cap * build - e_nom <= 0  ->  e_nom >= min_cap * build
+        c_min = min_caps[store] * b - e <= 0
+        n.model.add_constraints(c_min, name=f"store_min_if_built_{store}")
