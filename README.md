@@ -77,7 +77,7 @@ The standing loss can either be defined as timeseries in standing_loss_ts or as 
 
 7) stores:
 ```
-name,bus,carrier,e_nom_extendable,e_nom_min,e_nom_max,standing_loss,standing_loss_ts,build_year,e_cyclic,lifetime,investment,FOM,VOM,p_nom_max_area,factor,description,capital_cost
+name,bus,carrier,e_nom_extendable,e_nom_min,e_nom_max,standing_loss,standing_loss_ts,build_year,e_cyclic,lifetime,investment,FOM,VOM,p_nom_max_area,factor,e_nom_min_cap,description,capital_cost
 ```
 
 

@@ -1,8 +1,8 @@
 """
-Run preprocessing script for time series generation of a given location.
-
 @author: Lennart Trentmenn (lennart.trentmann@tum.de)
 @author: Amedeo Ceruti (amedeo.ceruti@tum.de)
+
+Run preprocessing script for time series generation of a given location.
 """
 
 import pandas as pd
@@ -46,9 +46,17 @@ CSV = dict(index_col=0, sep=',')
 
 def cutout(lat, lon, filename):
     """
-    Creates a cutout for a given location and year using atlite.
-    Returns the cutout object, or loads it from file if it already exists.
+    Create or load a cutout for a given location and year using atlite.
+
+    Args:
+        lat (float): Latitude of the location.
+        lon (float): Longitude of the location.
+        filename (str): Path to the cutout file.
+
+    Returns:
+        atlite.Cutout: Cutout object containing data for the specified location and year.
     """
+
     c = atlite.Cutout(
         filename,
         module=MODULE,
@@ -64,10 +72,13 @@ def cutout(lat, lon, filename):
 
 def time_series():
     """
-    Main function to calculate time series for the location/year.
-    Includes PV, wind, solar thermal, irradiation, and COPs.
-    Saves all data to CSVs.
+    Calculate time series for a given location and year, including PV, wind, solar thermal, irradiation, and COPs.
+    Saves all data to CSV files.
+
+    Returns:
+        dict: Dictionary containing all results with keys as identifiers.
     """
+
     utils.create_dir(RESULTSPATH)
     results = {}
 
@@ -192,8 +203,14 @@ def time_series():
 def merge_dfs(results):
     """
     Merge all DataFrames in the results dict into a single DataFrame.
-    Avoids column name conflicts and drops duplicate metadata columns.
+
+    Args:
+        results (dict): Dictionary containing DataFrames with keys as identifiers.
+
+    Returns:
+        pd.DataFrame: Merged DataFrame with all results, indexed by time.
     """
+
     drop_duplicates = ["x", "y", "lat", "lon", "temperature"]
     skip_items = ["T_network"]
 
@@ -221,9 +238,12 @@ def merge_dfs(results):
 
 def potentials():
     """
-    Main function to calculate thermal energy potentials.
-    Currently includes max heat flow and maximum HP output.
+    Calculate thermal energy potentials, including max heat flow and maximum heat pump output.
+
+    Returns:
+        dict: Dictionary containing potential values for different configurations.
     """
+
     pots = {}
     pots['Q_source_60-45'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=45, pressure=1.01325)
     pots['Q_source_70-50'] = dh.heat_flow(m_dot=100, temp_in=70, temp_out=50, pressure=1.01325)
@@ -240,6 +260,7 @@ def potentials():
     return pots
 
 
+# -------------------- Main Function --------------------
 if __name__ == "__main__":
     print('============================')
     print('Performing preprocessing...')

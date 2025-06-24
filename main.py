@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-@author: Lennart Trentmann (lennart.trentmann@tum.de); Amedeo Ceruti
-(amedeo.ceruti@tum.de)
+@author: Lennart Trentmann (lennart.trentmann@tum.de); 
+@author: Amedeo Ceruti (amedeo.ceruti@tum.de)
 
-This file is used to optimize district energy systems with the tool PyPSA-DESOpt-Heat
+This file is used to optimize district multi energy systems with the tool PyPSA-DESOpt-Heat
 of the Chair of Energy Systems (TUM) based on PyPSA from TU Berlin.
 """
 
@@ -29,14 +29,8 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 logging.basicConfig(level=logging.ERROR)
 pypsa.optimization.optimize.logger.setLevel(logging.INFO)
 
-# -------------------- Scenario Setup --------------------
-scenarios = [
-    {"REGION": "region_60-45", "RESULTS": "region_60-45"},
-    # Add more scenarios as needed
-]
-
-# -------------------- Main Execution --------------------
-for scenario in scenarios:
+def main():
+    # --- Scenario Setup ---
     REGION = scenario["REGION"]
     RESULTS = scenario["RESULTS"]
 
@@ -60,7 +54,7 @@ for scenario in scenarios:
     TEMP_SUP = float(params['TEMP_SUP'])
     TEMP_RET = float(params['TEMP_RET'])
 
-    # --- CAPEX Calculation ---
+    # --- Capital Cost Calculation ---
     for file in os.listdir(network_folder):
         if file.endswith(".csv"):
             filepath = os.path.join(network_folder, file)
@@ -73,7 +67,7 @@ for scenario in scenarios:
     # --- Load Timeseries ---
     df_timeseries = pd.read_csv(os.path.join(network_folder, 'timeseries.csv'), index_col=0, sep=";").iloc[:HOURS, :]
     df_timeseries.index = pd.to_datetime(df_timeseries.index, format='%d.%m.%Y %H:%M')
-    df_timeseries["st panels"] /= 700  # Convert Wh/m² to MWh/MW
+    df_timeseries["st panels"] /= 700  # Convert Wh/m² to MWh/MW https://www.iea-shc.org/Data/Sites/1/media/documents/statistics/calculation-method-for-tracked-concentrating-collectors.pdf
     network.set_snapshots(df_timeseries.index.values)
     df_timeseries["normed demand"] = df_timeseries["heat demand"] / df_timeseries["heat demand"].max()
 
@@ -83,6 +77,7 @@ for scenario in scenarios:
         network.import_components_from_dataframe(df, component)
         return df
 
+    # --- Import PyPSA Components ---
     df_buses = load_and_import('buses.csv', 'Bus')
     df_carriers = load_and_import('carriers.csv', 'Carrier')
     df_loads = load_and_import('loads.csv', 'Load')
@@ -164,13 +159,17 @@ for scenario in scenarios:
 
     start = time()
 
-    """network.optimize.add_load_shedding(
+    """
+    # --- Load Shedding Example ---
+    network.optimize.add_load_shedding(
         buses=["district heat"],
         marginal_cost=100,    # High cost to ensure shedding is last resort
-        p_nom=10,              # Maximum allowed shedding (MW)
+        p_nom=10,             # Maximum allowed shedding (MW)
         sign=1,
-    )"""
+    )
+    """
 
+    # --- Optimization ---
     network.optimize(
         solver_name='gurobi',
         solver_options={"MIPGap": 0.001, "FeasibilityTol": 1e-4},
@@ -202,18 +201,12 @@ for scenario in scenarios:
     summary = create_summary_table(network)
     summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=';', index=False)
 
-    # --- Plots ---
+    # --- Power Flow Plots ---
     # Adapt components which should be plotted #
-    # Input: - network: PyPSA Network object
-    #        - bus: str, type of plot (e.g., "district heat", "heat", "district elec")
-    #        - components: list of str, components to plot
-    #        - title: str, title of the plot
-    #        - ylabel: str, y-axis label
-    #        - region: str, region name for saving the plot
-
     flow_plot(network, "district heat", 
-              ["geothermal plant", "geothermal hp", "st panels", "large scale heat pump", "biomethane CHP", 
-               "biomethane boiler", "TTES discharge", "PTES discharge", "elec boiler"],
+              ["geothermal plant", "geothermal hp", "st panels", 
+              "large scale heat pump", "biomethane CHP", "biomethane boiler", 
+              "TTES discharge", "PTES discharge", "elec boiler"],
               "", "district heating supply", REGION)
 
     flow_plot(network, "heat", 
@@ -224,10 +217,24 @@ for scenario in scenarios:
               ["battery storage", "pv panels", "electricity grid", "biomethane CHP"],
               "", "electricity supply", REGION)
 
+    # --- Storage Energy Plots ---
+    # Adapt components which should be plotted #
     plot_storage_energy(network, "PTES", REGION, TEMP_SUP, TEMP_RET)
     plot_storage_energy(network, "TTES", REGION, TEMP_SUP, TEMP_RET)
 
     # --- End of Scenario ---
     print(f"Scenario '{REGION}' completed.\n")
 
-print("All scenarios completed.")
+
+# -------------------- Main Function --------------------
+if __name__ == "__main__":
+    # -------------------- Scenario Setup --------------------
+    scenarios = [
+        {"REGION": "region_60-45", "RESULTS": "region_60-45"},
+        # Add more scenarios as needed
+    ]
+    # -------------------- Main Execution --------------------
+    for scenario in scenarios:
+        main()
+
+    print("All scenarios completed.")

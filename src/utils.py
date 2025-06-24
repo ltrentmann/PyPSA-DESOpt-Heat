@@ -11,25 +11,32 @@ mycmap = LinearSegmentedColormap.from_list('mycmap', ['#f9ba00', '#c4071b'])
 mycmap_dark = LinearSegmentedColormap.from_list('mycmap_dark', ['#0f1b5f', '#c4071b'])
 
 def capacities(lon, lat, capacity=1):
-    """Initializes a dataframe for a location in a cutout and returns a 
-    dataframe to pass to layout_from_capacity_list.
-    
-    Args:
-        lon (float): longitude of the location
-        lat (float): latitude of the location
-        capacity (float): capacity of the plant in kW
-    Returns:
-        df (pd.DataFrame): dataframe with capacities
     """
+    Initialize a DataFrame for a location in a cutout to be used with layout_from_capacity_list.
+
+    Args:
+        lon (float): Longitude of the location.
+        lat (float): Latitude of the location.
+        capacity (float): Capacity of the plant in kW.
+
+    Returns:
+        df (pd.DataFrame): DataFrame with capacities.
+    """
+
     df = pd.DataFrame.from_dict({'index': 0, 'x': lon, 'y': lat, 'Capacity': capacity}, orient='index').T
     return df
 
 def create_dir(path):
-    """Creates a directory if it does not exist and deletes old results.
-    
-    Args:
-        path (str): path to directory
     """
+    Create a directory if it does not exist and delete old results.
+
+    Args:
+        path (str): Path to the directory.
+
+    Returns:
+        None: This function modifies the filesystem but returns nothing.
+    """
+
     # create results directory
     if not os.path.exists(path):
         os.makedirs(path)
@@ -40,16 +47,16 @@ def create_dir(path):
     return
 
 def merge_dfs(results):
-    """Merge all DataFrames in results to a single DataFrame. Drops duplicates
-    in a list of column names and renames the rest of the duplicated column
-     names to avoid duplicates.
-     
-     Args:
-         results (dict): dictionary with results in DataFrames with the same
-             datetime index.
-     Returns:
-         df (pd.DataFrame): merged DataFrame
     """
+    Merge all DataFrames in the results dictionary into a single DataFrame.
+
+    Args:
+        results (dict): Dictionary of DataFrames with the same datetime index.
+
+    Returns:
+        df (pd.DataFrame): Merged DataFrame with duplicates handled and columns renamed as needed.
+    """
+
     # list of duplicate cols to drop (which are the same values)
     drop_duplicates = ["x", "y", "lat", "lon", "temperature"]
     # dict keys to skip
@@ -86,16 +93,13 @@ def create_color_dict(network):
     """
     Create a dictionary mapping all component names in the network to their carrier colors.
 
-    Parameters
-    ----------
-    network : pypsa.Network
-        The PyPSA network object.
+    Args:
+        network (pypsa.Network): The PyPSA network object.
 
-    Returns
-    -------
-    dict
-        A dictionary mapping component names to carrier colors.
+    Returns:
+        color_dict (dict): Dictionary mapping component names to carrier colors.
     """
+
     color_dict = {}
     
     # List of components that have a 'carrier' attribute
@@ -119,6 +123,17 @@ def create_color_dict(network):
 
 # === Helper Functions ===
 def get_bus_flows(network, bus_name):
+    """
+    Retrieve the power flows for a specific bus in the network.
+
+    Args:
+        network (pypsa.Network): The PyPSA network object after optimization.
+        bus_name (str): Name of the bus to retrieve flows for.
+
+    Returns:
+        pd.DataFrame: DataFrame containing the power flows for the specified bus.
+    """
+
     flows = pd.DataFrame(index=network.snapshots)
 
     for gen in network.generators.index:
@@ -137,6 +152,18 @@ def get_bus_flows(network, bus_name):
     return flows.reindex(network.snapshots, fill_value=0)
 
 def compute_storage_geometry(energy_MWh, temp_h, temp_c, area_m2):
+    """
+    Computes the geometry of a thermal energy storage based on the energy stored, temperature difference, and area.
+    Uses CoolProp to calculate the density and heat capacity of water at the average temperature.
+    Args:
+        energy_MWh (float): Energy stored in MWh.
+        temp_h (float): High temperature of the storage in degrees Celsius.
+        temp_c (float): Low temperature of the storage in degrees Celsius.
+        area_m2 (float): Area of the storage in square meters.
+    Returns:
+        tuple: Volume (m³), height (m), and diameter (m) of the storage.
+    """
+
     pressure = 101325
     temp_K = (temp_h + temp_c) / 2 + 273.15
     density = PropsSI("D", "P", pressure, "T", temp_K, "Water")
@@ -149,6 +176,21 @@ def compute_storage_geometry(energy_MWh, temp_h, temp_c, area_m2):
 
 # === Plot Functions ===
 def flow_plot(network, bus_name, order, demand, title, folder):
+    """
+    Plot bus flows over time and create a pie chart of flow distribution.
+
+    Args:
+        network (pypsa.Network): PyPSA network after optimization.
+        bus_name (str): Name of the bus to plot flows for.
+        order (list): Order of components to plot.
+        demand (float): Demand value for the bus.
+        title (str): Title of the plot.
+        folder (str): Folder where results are saved.
+
+    Returns:
+        None: Saves plots of bus flows and flow distribution pie chart to files.
+    """
+
     plt.style.use('seaborn-v0_8-paper')
     plt.rcParams.update({'font.size': 10})
 
@@ -260,6 +302,20 @@ def flow_plot(network, bus_name, order, demand, title, folder):
 
 
 def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
+    """
+    Plot the energy stored in stores over time and calculate storage geometry.
+
+    Args:
+        network (pypsa.Network): PyPSA network after optimization.
+        bus_name (str): Name of the bus to plot storage energy for.
+        folder (str): Folder where results are saved.
+        temp_h (float): High temperature of the storage in °C.
+        temp_c (float): Low temperature of the storage in °C.
+
+    Returns:
+        None: Saves a plot of stored energy and calculates storage geometry.
+    """
+
     storage_energy = pd.DataFrame(index=network.snapshots)
 
     for store in network.stores.index:
@@ -327,17 +383,13 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
 
 def create_summary_table(network):
     """
-    Generates a summary table with installed capacity, CapEx, and OpEx for each component.
-    
-    Parameters:
-    -----------
-    network : pypsa.Network
-        The PyPSA network after running network.optimize().
-    
+    Generate a summary table with installed capacity, CapEx, and OpEx for each component.
+
+    Args:
+        network (pypsa.Network): PyPSA network after optimization.
+
     Returns:
-    --------
-    pd.DataFrame
-        A summary table with Installed Capacity (MW), CapEx (€), and OpEx (€) for generators.
+        pd.DataFrame: Summary table with Installed Capacity (MW), CapEx (€), and OpEx (€) for generators.
     """
     
     summary_data = []

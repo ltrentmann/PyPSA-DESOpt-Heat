@@ -13,15 +13,52 @@ from src.utils import mycmap, mycmap_dark
 # Utility Functions
 # -------------------------
 def annuity(capex, lifetime, wacc):
+    """
+    Calculate the annuity factor for a given capital expenditure, lifetime, and weighted average cost of capital (WACC).
+
+    Args:
+        capex (float): Capital expenditure (investment cost).
+        lifetime (int): Lifetime of the asset in years.
+        wacc (float): Weighted average cost of capital (as a decimal, e.g., 0.05 for 5%).
+
+    Returns:
+        df (pd.DataFrame): Annualized cost of the asset.
+    """
     return capex * (wacc * (1 + wacc)**lifetime) / ((1 + wacc)**lifetime - 1)
 
 def resolve_attribute(constant, timeseries_key, df_timeseries):
+    """
+    Resolve an attribute that can either be a constant or a timeseries.
+
+    Args:
+        constant: A constant value or NaN.
+        timeseries_key: The key for the timeseries in the DataFrame.
+        df_timeseries (pd.DataFrame): DataFrame containing timeseries data.
+
+    Returns:
+        df (pd.Series): The resolved timeseries or constant value.
+    """
     return df_timeseries.loc[:, timeseries_key] if pd.isna(constant) else constant
 
 # -------------------------
 # Timeseries Attribute Assignment
 # -------------------------
 def add_effs_and_marginalcosts(index, row, df_timeseries):
+    """
+    Resolve efficiency and marginal costs for a component based on its attributes.
+
+    Args:
+        index (Any): Index of the component.
+        row (pd.Series): Row from the DataFrame containing component attributes.
+        df_timeseries (pd.DataFrame): DataFrame containing timeseries data.
+
+    Returns:
+        fuel (pd.Series): Fuel cost timeseries.
+        eff (Union[pd.Series, float]): Efficiency timeseries or constant value.
+        p_max_pu (Union[pd.Series, float]): Maximum power per unit (pu) timeseries or constant value.
+        p_min_pu (Union[pd.Series, float]): Minimum power per unit (pu) timeseries or constant value.
+    """
+
     if not pd.isna(row.fuel_costs) and not pd.isna(row.fuel_costs_ts):
         raise ValueError(f"Component {index} has both 'fuel_costs' and 'fuel_costs_ts' defined.")
     if not pd.isna(row.efficiency) and not pd.isna(row.efficiency_ts):
@@ -47,12 +84,36 @@ def add_effs_and_marginalcosts(index, row, df_timeseries):
     return fuel, eff, p_max_pu, p_min_pu
 
 def add_seasonal_effs(index, row, df_timeseries):
+    """
+    Resolve seasonal efficiencies for a component based on its attributes.
+
+    Args:
+        index (Any): Index of the component.
+        row (pd.Series): Row from the DataFrame containing component attributes.
+        df_timeseries (pd.DataFrame): DataFrame containing timeseries data.
+
+    Returns:
+        effs (Union[pd.Series, float]): Seasonal efficiency timeseries or constant value.
+    """
+
     return resolve_attribute(row.standing_loss, row.standing_loss_ts, df_timeseries)
 
 # -------------------------
 # Annuity Calculation Wrapper
 # -------------------------
 def calculate_annuity(filepath, file, INTEREST):
+    """
+    Calculate the annuity for a given component type based on its investment and lifetime.
+
+    Args:
+        filepath (str): Path to the CSV file containing component data.
+        file (str): Name of the file used to determine the component type.
+        INTEREST (float): Weighted average cost of capital (WACC) as a decimal.
+
+    Returns:
+        df (pd.DataFrame): DataFrame containing component data with calculated capital costs.
+    """
+
     df = pd.read_csv(filepath, index_col=0)
     component_type = file.split('.')[0]
 
@@ -65,6 +126,21 @@ def calculate_annuity(filepath, file, INTEREST):
 # Constraint Construction
 # -------------------------
 def add_area_constraint(network, snapshots, df_generators, df_links, df_stores, df_storageunits):
+    """
+    Add area constraints based on the maximum area allowed for each component type.
+
+    Args:
+        network (pypsa.Network): PyPSA network object.
+        snapshots (List[Any]): List of time snapshots.
+        df_generators (pd.DataFrame): DataFrame containing generator data.
+        df_links (pd.DataFrame): DataFrame containing link data.
+        df_stores (pd.DataFrame): DataFrame containing store data.
+        df_storageunits (pd.DataFrame): DataFrame containing storage unit data.
+
+    Returns:
+        None: Modifies the network object in place by adding area constraints.
+    """
+
     vars_gen_pnom = get_var(network, "Generator", "p_nom")
     vars_lin_pnom = get_var(network, "Link", "p_nom")
     vars_sto_pnom = get_var(network, "Store", "e_nom")
@@ -103,6 +179,20 @@ def add_area_constraint(network, snapshots, df_generators, df_links, df_stores, 
 # -------------------------
 
 def dhn_eff_calc(network, basepath, REGION, RESULTS):
+    """
+    Calculate the average daily efficiency of the district heating network.
+
+    Args:
+        network (pypsa.Network): PyPSA network object.
+        basepath (str): Base path for the project directory.
+        REGION (str): Name of the region (used for file naming).
+        RESULTS (str): Name of the results directory.
+
+    Returns:
+        recomputed_loss (np.ndarray): Recomputed losses based on average efficiency.
+        avg_capacity (float): Average capacity of the heating grid.
+    """
+
     # Load and normalize heat demand
     heat_demand = network.loads_t["p_set"].loc[:, "heat demand"]
     heat_demand_normalized = heat_demand / heat_demand.max()
@@ -165,6 +255,21 @@ def dhn_eff_calc(network, basepath, REGION, RESULTS):
 # Piecewise Linear Cost Modeling
 # -------------------------
 def add_piecewise_cost_link(n, snapshots, basepath, network_folder, INTEREST, RESULTS):
+    """
+    Add piecewise linear cost modeling for the district heating grid link.
+
+    Args:
+        n (pypsa.Network): PyPSA network object.
+        snapshots (List[Any]): List of time snapshots.
+        basepath (str): Base path for the project directory.
+        network_folder (str): Folder containing the network data.
+        INTEREST (float): Weighted average cost of capital (WACC) as a decimal.
+        RESULTS (str): Name of the results directory.
+
+    Returns:
+        None: Modifies the network object in place by adding piecewise linear constraints.
+    """
+
     m = n.model
     link_name = "heating grid"
 
@@ -214,6 +319,18 @@ def add_piecewise_cost_link(n, snapshots, basepath, network_folder, INTEREST, RE
 # Store Minimum Capacity Enforcement
 # -------------------------
 def enforce_min_store_if_built(n, snapshots, df_stores):
+    """
+    Enforce minimum capacity for stores that are extendable and built.
+
+    Args:
+        n (pypsa.Network): PyPSA network object.
+        snapshots (List[Any]): List of time snapshots.
+        df_stores (pd.DataFrame): DataFrame containing store data with minimum capacity attributes.
+
+    Returns:
+        None: Modifies the network object in place by adding constraints.
+    """
+
     stores = n.stores[n.stores.e_nom_extendable].index
 
     if stores.empty:
