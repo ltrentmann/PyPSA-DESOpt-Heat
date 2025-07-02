@@ -216,6 +216,8 @@ def main():
     flow_plot(network, "district elec", 
               ["battery storage", "pv panels", "electricity grid", "biomethane CHP"],
               "", "electricity supply", REGION)
+    
+    plot_heating_grid_loss(network, REGION)
 
     # --- Storage Energy Plots ---
     # Adapt components which should be plotted #

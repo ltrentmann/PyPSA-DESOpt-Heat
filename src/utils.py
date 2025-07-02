@@ -380,6 +380,67 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
     plt.tight_layout()
     plt.savefig(os.path.join(network_folder, f'{bus_name}_{folder}_storage_energy.svg'))
 
+def plot_heating_grid_loss(network, folder, bus_name=None):
+    """
+    Calculate and plot losses for links with names containing 'heating grid',
+    formatted like the storage energy plot.
+
+    Parameters:
+        network (pypsa.Network): PyPSA network object
+        folder (str): Subfolder in ./results to save outputs
+        bus_name (str, optional): Used in titles and filenames
+
+    Returns:
+        float: Total cumulative losses over all timesteps (MWh)
+    """
+    # Create output folder
+    output_path = os.path.join("results", folder)
+    os.makedirs(output_path, exist_ok=True)
+
+    # Identify heating grid links by name
+    heating_links = [link for link in network.links.index if "heating grid" in link.lower()]
+    if not heating_links:
+        print("No links containing 'heating grid' in their name.")
+        return 0.0
+
+    # Calculate losses: abs(p1 - p0)
+    losses = abs(network.links_t.p1[heating_links] + network.links_t.p0[heating_links])
+    total_losses = losses.sum(axis=1)
+
+    # Save time series data to CSV
+    csv_name = f"{bus_name}_heating_grid_loss_timeseries.csv" if bus_name else "heating_grid_loss_timeseries.csv"
+    total_losses.to_csv(os.path.join(output_path, csv_name), header=["Loss (MW)"])
+
+    # Create plot similar to storage energy function
+    fig, (ax, ax2) = plt.subplots(1, 2, figsize=(12, 4), gridspec_kw={'width_ratios': [1, 1/3]})
+
+    # Plot resampled daily mean loss
+    total_losses.resample("D").mean().plot(ax=ax, color='#0f1b5f', linewidth=2, label='Heating Grid Losses')
+
+    # Format left plot
+    ax.set_ylabel("Losses [MW]")
+    ax.set_xlabel("Date")
+    ax.set_title(f"Heating Grid Losses{f' at {bus_name}' if bus_name else ''}")
+    ax.grid(True)
+    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=2, frameon=True, framealpha=0.8)
+
+    # Summary stats for display in right panel
+    total_loss_mwh = total_losses.sum()
+    avg_loss = total_losses.mean()
+    peak_loss = total_losses.max()
+
+    ax2.text(0.5, 0.75, f"Total: {total_loss_mwh:.2f} MWh", ha='center')
+    ax2.text(0.5, 0.5, f"Avg: {avg_loss:.2f} MW", ha='center')
+    ax2.text(0.5, 0.25, f"Peak: {peak_loss:.2f} MW", ha='center')
+    ax2.axis("off")
+
+    # Save figure
+    filename = f"{bus_name}_heating_grid_loss.svg" if bus_name else "heating_grid_loss.svg"
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_path, filename))
+
+    return total_loss_mwh
+
 
 def create_summary_table(network):
     """
@@ -484,6 +545,7 @@ def create_summary_table(network):
 
         if link_name == "heating grid":
             capex = network.model.variables["pw_link_capcost"].solution.item()
+            loss = (network.links_t.p0["heating grid"] + network.links_t.p1["heating grid"]).sum()
 
         summary_data.append({
             "Component": link_name,
