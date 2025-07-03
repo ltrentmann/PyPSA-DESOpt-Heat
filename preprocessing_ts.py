@@ -255,7 +255,7 @@ def potentials():
     pots['Q_max_geo_90-60'] = hp.max_elec_power(Q_source=pots['Q_source_90-60'], cop=25)
 
     pots_df = pd.DataFrame.from_dict(pots, orient='index', columns=['Value'])
-    pots_df.to_csv(RESULTSPATH + "potentials.csv", sep=";", decimal=".", index_label='Potentials')
+    pots_df.to_csv(RESULTSPATH + "potentials.csv", sep=",", decimal=".", index_label='Potentials')
     
     return pots
 

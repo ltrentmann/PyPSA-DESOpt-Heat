@@ -199,7 +199,7 @@ def main():
     print("CAPEX:\n", network.statistics.capex())
 
     summary = create_summary_table(network)
-    summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=';', index=False)
+    summary.to_csv(os.path.join(results_folder, "summary.csv"), sep=',', index=False)
 
     # --- Power Flow Plots ---
     # Adapt components which should be plotted #
