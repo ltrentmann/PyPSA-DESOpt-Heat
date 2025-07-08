@@ -487,6 +487,7 @@ def create_summary_table(network):
         op_series = network.storage_units_t.p[store_name]
         if store_name in network.storage_units_t.marginal_cost:
             opex = (abs(network.storage_units_t.marginal_cost[store_name] * op_series)).sum()
+        co2_emissions = (network.generators_t.p[gen_name] * network.carriers.co2_emissions[network.generators.carrier[gen_name]]).sum().sum()
 
         summary_data.append({
             "Component": store_name,
@@ -495,7 +496,8 @@ def create_summary_table(network):
             "Installed Capacity (MW)": installed_capacity,
             "Generation (MWh)": abs(op_series.sum()),
             "CapEx (€)": capex,
-            "OpEx (€)": opex
+            "OpEx (€)": opex,
+            "CO2 Emissions (t)": co2_emissions
         })
 
     # --- Extendable Stores (optional) ---

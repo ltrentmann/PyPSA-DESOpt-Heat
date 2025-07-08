@@ -8,6 +8,7 @@ import pypsa
 from pypsa.descriptors import get_switchable_as_dense as get_as_dense
 from pypsa.optimization.compat import define_constraints, get_var
 from src.utils import mycmap, mycmap_dark 
+from src.utils import create_dir
 
 # -------------------------
 # Utility Functions
@@ -193,12 +194,15 @@ def dhn_eff_calc(network, basepath, REGION, RESULTS):
         avg_capacity (float): Average capacity of the heating grid.
     """
 
+    # Ensure the results directory exists
+    create_dir(f"{basepath}/results/{RESULTS}")
+
     # Load and normalize heat demand
     heat_demand = network.loads_t["p_set"].loc[:, "heat demand"]
     heat_demand_normalized = heat_demand / heat_demand.max()
 
     # Load losses and capacity data
-    df_loss = pd.read_csv(os.path.join(basepath, 'model', RESULTS, "costs_func_heat_grid.csv"))
+    df_loss = pd.read_csv(os.path.join(basepath, 'model', REGION, "costs_func_heat_grid.csv"))
     capacity = df_loss['capacity'].values  # MW
     losses = df_loss['efficiency'].values  # Total loss (1 - efficiency)
 

@@ -325,7 +325,7 @@
 <!-- st panels (generator) -->
 <g id="node10" class="node">
 <title>st panels (generator)</title>
-<g id="a_node10"><a xlink:title="Generator: st panels&#10;Bus: district heat&#10;Carrier: st&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 18508.90 currency/&#10;Marginal cost: [0.32, 0.32, 0.32, 0.32, 0.32, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
+<g id="a_node10"><a xlink:title="Generator: st panels&#10;Bus: district heat&#10;Carrier: st&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 16049.10 currency/&#10;Marginal cost: [0.32, 0.32, 0.32, 0.32, 0.32, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
 <ellipse fill="none" stroke="black" stroke-width="2" cx="1063.38" cy="-507.27" rx="39.6" ry="39.6"/>
 <text text-anchor="start" x="1043.13" y="-504.54" font-family="Courier New" font-size="8.00" fill="red">st panels</text>
 </a>

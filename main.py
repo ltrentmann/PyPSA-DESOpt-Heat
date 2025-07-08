@@ -207,25 +207,25 @@ def main():
               ["geothermal plant", "geothermal hp", "st panels", 
               "large scale heat pump", "biomethane CHP", "biomethane boiler", 
               "TTES discharge", "PTES discharge", "elec boiler"],
-              "", "district heating supply", REGION)
+              "", "district heating supply", RESULTS)
 
     flow_plot(network, "heat", 
               ["dec ground heat pump", "dec air heat pump", "dec pellet boiler"],
-              "", "building integrated supply", REGION)
+              "", "building integrated supply", RESULTS)
 
     flow_plot(network, "district elec", 
               ["battery storage", "pv panels", "electricity grid", "biomethane CHP"],
-              "", "electricity supply", REGION)
+              "", "electricity supply", RESULTS)
     
-    plot_heating_grid_loss(network, REGION)
+    plot_heating_grid_loss(network, RESULTS)
 
     # --- Storage Energy Plots ---
     # Adapt components which should be plotted #
-    plot_storage_energy(network, "PTES", REGION, TEMP_SUP, TEMP_RET)
-    plot_storage_energy(network, "TTES", REGION, TEMP_SUP, TEMP_RET)
+    plot_storage_energy(network, "PTES", RESULTS, TEMP_SUP, TEMP_RET)
+    plot_storage_energy(network, "TTES", RESULTS, TEMP_SUP, TEMP_RET)
 
     # --- End of Scenario ---
-    print(f"Scenario '{REGION}' completed.\n")
+    print(f"Scenario '{RESULTS}' completed.\n")
 
 
 # -------------------- Main Function --------------------
