@@ -182,7 +182,7 @@ def time_series():
                 temp_source=source_temp_series,
                 df_model=pd.read_csv("./data/jesper_model.csv", header=0, sep=",", index_col=1)
             )
-            results[f'cop-jesper-air-{id_}'] = cop_result
+            results[f'cop-jesper-ground-{id_}'] = cop_result
         else:
             source_temp_value = df_nets.loc[i, 'T_source']
             cop_result = hp.cop_jesper(
@@ -190,7 +190,7 @@ def time_series():
                 temp_source=source_temp_value,
                 df_model=pd.read_csv("./data/jesper_model.csv", header=0, sep=",", index_col=1)
             )
-            results[f'cop-jesper-ground-{id_}'] = cop_result
+            results[f'cop-jesper-dhn-return-{id_}'] = cop_result
 
         results[f'cop-jesper-{id_}'] = cop_result
         results[f'cop-jesper-{id_}'].to_csv(RESULTSPATH + f"cop-central-jesper-{id_}.csv")

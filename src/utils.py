@@ -255,6 +255,12 @@ def flow_plot(network, bus_name, order, demand, title, folder):
     ax1.grid(True)
 
     sum_values = flows.sum()
+    # substract the sum of store[curtailment] from geothermal hp or goethermal
+    if "geothermal hp" in sum_values.index:
+        sum_values["geothermal hp"] -= network.stores_t.e["curtailment2"].sum()
+    if "geothermal plant" in sum_values.index:
+        sum_values["geothermal plant"] -= network.stores_t.e["curtailment"].sum()
+        
     wedges, texts, autotexts = ax2.pie(
         sum_values, autopct='%1.1f%%', startangle=90,
         colors=[COLOR_DICT.get(i, "#CCCCCC") for i in sum_values.index],

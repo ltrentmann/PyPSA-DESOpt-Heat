@@ -105,7 +105,7 @@ def main():
         network.links_t["efficiency"][link] = eff
         network.links_t["p_max_pu"][link] = p_max_pu
         network.links_t["p_min_pu"][link] = p_min_pu
-        network.links_t["marginal_cost"][link] = row.VOM if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean()
+        network.links_t["marginal_cost"][link] = row.VOM + fuel if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean() + fuel
         network.links.loc[link, "capital_cost"] = row.capital_cost * pd.Series(eff).mean()
 
     # --- Additional Link Efficiencies ---

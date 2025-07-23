@@ -76,7 +76,7 @@
 <!-- district elec (bus)&#45;&gt;elec market (bus) -->
 <g id="edge16" class="edge">
 <title>district elec (bus)&#45;&gt;elec market (bus)</title>
-<g id="a_edge16"><a xlink:title="Link: selling&#10;From: district elec (bus0)&#10;To: elec market (bus1)&#10;Carrier: electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [0.00, 0.00, 0.00, 0.00, 0.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge16"><a xlink:title="Link: selling&#10;From: district elec (bus0)&#10;To: elec market (bus1)&#10;Carrier: electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [&#45;102.23, &#45;102.23, &#45;102.23, &#45;102.23, &#45;102.23, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M772.27,-496.05C728.04,-475.62 632.88,-431.67 632.88,-431.67 632.88,-431.67 543.07,-377.87 495.77,-349.54"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="486.04,-343.71 499.11,-345.24 489.75,-345.64 496.46,-349.66 496.33,-349.87 496.21,-350.09 489.49,-346.07 493.56,-354.51 486.04,-343.71"/>
 </a>
