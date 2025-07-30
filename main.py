@@ -105,7 +105,7 @@ def main():
         network.links_t["efficiency"][link] = eff
         network.links_t["p_max_pu"][link] = p_max_pu
         network.links_t["p_min_pu"][link] = p_min_pu
-        network.links_t["marginal_cost"][link] = row.VOM + fuel if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean() + fuel
+        network.links_t["marginal_cost"][link] = row.VOM + fuel if (pd.Series(eff) == 0).all() else row.VOM * pd.Series(eff).mean() + fuel 
         network.links.loc[link, "capital_cost"] = row.capital_cost * pd.Series(eff).mean()
 
     # --- Additional Link Efficiencies ---
@@ -132,23 +132,13 @@ def main():
     lifetime_dhn = network.links.loc["heating grid", "lifetime"]
     network.remove("Link", "heating grid")
 
-    loss, cap = dhn_eff_calc(network, basepath, REGION, RESULTS)
-
-    network.add(
-        "Link", "heating grid",
-        bus0="district heat",
-        bus1="heat",
-        efficiency=1 - (loss / (network.loads_t.p_set["heat demand"] / network.loads_t.p_set["heat demand"].max() * cap)),
-        lifetime=lifetime_dhn,
-        p_nom_extendable=True,
-        # marginal_cost=-103.36,
-    )
+    add_piecewise_dhn_links(network, basepath, REGION, lifetime_dhn, INTEREST)
 
     # --- Constraints and Optimization ---
     def extra_functionalities(network, snapshots):
         add_area_constraint(network, snapshots, df_generators, df_links, df_stores, df_storageunits)
-        add_piecewise_cost_link(network, snapshots, basepath, network_folder, INTEREST, RESULTS)
         enforce_min_store_if_built(network, snapshots, df_stores)
+        enforce_min_heat_link_if_built(network, snapshots, basepath, REGION)
 
     network.add("GlobalConstraint", "co2_limit", sense="<=", constant=CO2_LIMIT)
 
@@ -182,9 +172,7 @@ def main():
     # --- Results ---
     print("Objective value:", network.objective)
     print("SUM:", network.statistics.opex().sum() + network.statistics.capex().sum())
-    print("DHN:", network.model.variables["pw_link_capcost"].solution.item())
-    print("Objective Check:", network.objective - (network.statistics.opex().sum() + network.statistics.capex().sum()) - network.model.variables["pw_link_capcost"].solution.item())
-
+    
     # --- Export Results ---
     network.export_to_csv_folder(os.path.join("./results", RESULTS))
 

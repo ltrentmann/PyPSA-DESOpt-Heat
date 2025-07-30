@@ -174,150 +174,6 @@ def add_area_constraint(network, snapshots, df_generators, df_links, df_stores, 
         )
 
         define_constraints(network, total_area_expr, "<=", max_area, f"area_constraint_p_nom_max_area_{max_area}")
-
-# -------------------------
-# District Heating Efficiency
-# -------------------------
-
-def dhn_eff_calc(network, basepath, REGION, RESULTS):
-    """
-    Calculate the average daily efficiency of the district heating network.
-
-    Args:
-        network (pypsa.Network): PyPSA network object.
-        basepath (str): Base path for the project directory.
-        REGION (str): Name of the region (used for file naming).
-        RESULTS (str): Name of the results directory.
-
-    Returns:
-        recomputed_loss (np.ndarray): Recomputed losses based on average efficiency.
-        avg_capacity (float): Average capacity of the heating grid.
-    """
-
-    # Ensure the results directory exists
-    create_dir(f"{basepath}/results/{RESULTS}")
-
-    # Load and normalize heat demand
-    heat_demand = network.loads_t["p_set"].loc[:, "heat demand"]
-    heat_demand_normalized = heat_demand / heat_demand.max()
-
-    # Load losses and capacity data
-    df_loss = pd.read_csv(os.path.join(basepath, 'model', REGION, "costs_func_heat_grid.csv"))
-    capacity = df_loss['capacity'].values  # MW
-    losses = df_loss['efficiency'].values  # Total loss (1 - efficiency)
-
-    # Broadcast demand and losses
-    demand_scaled = heat_demand_normalized.values * capacity[:, np.newaxis]  # Shape: (N, T)
-    loss_broadcast = losses[:, np.newaxis]  # Shape: (N, 1)
-
-    # Avoid division by zero
-    demand_scaled[demand_scaled == 0] = np.nan
-
-    # Compute instantaneous efficiency
-    efficiency = 1 - (loss_broadcast / demand_scaled)  # Shape: (N, T)
-
-    # Convert to DataFrame
-    efficiency_df = pd.DataFrame(
-        efficiency.T,
-        index=heat_demand.index,
-        columns=[f"{c:.0f} MW" for c in capacity]
-    )
-
-    # Daily mean efficiency
-    efficiency_daily = efficiency_df.resample("1D").mean()
-
-    # Plot average efficiency across capacities
-    efficiency_avg = efficiency_daily.mean(axis=1)
-
-    plt.figure(figsize=(6, 6))
-    plt.plot(efficiency_avg.index, efficiency_avg, color=mycmap_dark(0), linewidth=2.5, label="Avg Efficiency")
-    plt.xlabel("Date")
-    plt.ylabel("Avg Efficiency (daily mean)")
-    plt.title(f"{REGION} – Average Daily Efficiency")
-    plt.grid(True)
-    # Move legend below the plot
-    plt.legend(
-        loc="upper center",
-        bbox_to_anchor=(0.5, -0.2),
-        fontsize=11,
-        ncol=4,  # Adjust number of columns depending on number of labels
-        frameon=False
-    )
-    plt.tight_layout()
-    plt.savefig(os.path.join(basepath, "results", RESULTS, f"average_efficiency_daily_{REGION}.svg"))
-    plt.close()
-
-    # Recompute daily effective losses from average efficiency
-    avg_capacity = capacity.mean()
-    heat_demand_daily = heat_demand_normalized.resample("1D").mean()
-    recomputed_loss_ts = (1 - efficiency_avg.values) * (heat_demand_daily.values * avg_capacity)
-    recomputed_loss = np.array(recomputed_loss_ts)[0]
-
-    return recomputed_loss, avg_capacity
-
-# -------------------------
-# Piecewise Linear Cost Modeling
-# -------------------------
-def add_piecewise_cost_link(n, snapshots, basepath, network_folder, INTEREST, RESULTS):
-    """
-    Add piecewise linear cost modeling for the district heating grid link.
-
-    Args:
-        n (pypsa.Network): PyPSA network object.
-        snapshots (List[Any]): List of time snapshots.
-        basepath (str): Base path for the project directory.
-        network_folder (str): Folder containing the network data.
-        INTEREST (float): Weighted average cost of capital (WACC) as a decimal.
-        RESULTS (str): Name of the results directory.
-
-    Returns:
-        None: Modifies the network object in place by adding piecewise linear constraints.
-    """
-
-    m = n.model
-    link_name = "heating grid"
-
-    df = pd.read_csv(os.path.join(basepath, network_folder, "costs_func_heat_grid.csv"))
-    breakpoints, total_costs = df['capacity'].values, df['cost'].values
-
-    lifetime = n.links.loc[link_name, "lifetime"]
-    annualized_costs = [annuity(cost, lifetime, INTEREST) for cost in total_costs]
-
-    slopes = np.diff(annualized_costs) / np.diff(breakpoints)
-    is_convex = np.all(np.diff(slopes) >= -1e-8)
-
-    if not is_convex:
-        ir = IsotonicRegression(increasing=True)
-        annualized_costs = ir.fit_transform(breakpoints, annualized_costs)
-
-    slopes, intercepts = [], []
-    for i in range(len(breakpoints) - 1):
-        a = (annualized_costs[i+1] - annualized_costs[i]) / (breakpoints[i+1] - breakpoints[i])
-        b = annualized_costs[i] - a * breakpoints[i]
-        slopes.append(a)
-        intercepts.append(b)
-
-    capcost = m.add_variables(name="pw_link_capcost", lower=0)
-
-    for i, (a, b) in enumerate(zip(slopes, intercepts)):
-        m.add_constraints(capcost >= a * m.variables["Link-p_nom"].loc[link_name] + b,
-                          name=f"pw_link_epigraph_seg_{i}")
-
-    # Plot
-    fig, ax = plt.subplots(figsize=(6, 6))
-    # Original and adjusted curves
-    ax.plot(breakpoints, annualized_costs, 'o-', label='DHN cost function', color='#0f1b5f')
-    # Epigraph region
-    ax.fill_between(breakpoints, annualized_costs, max(annualized_costs) * 1.1, alpha=0.1, color='#CCCCCC', label='Epigraph (feasible region)')
-    ax.set_xlabel('Capacity (MW)')
-    ax.set_ylabel('Annualized Cost [€/year]')
-    ax.grid(True)
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=2)
-    plt.tight_layout()
-    # save the plot in results folder
-    plt.savefig(f"./results/{RESULTS}/cost_curve_adjustment.svg")
-
-    m.objective += capcost
     
 # -------------------------
 # Store Minimum Capacity Enforcement
@@ -338,8 +194,8 @@ def enforce_min_store_if_built(n, snapshots, df_stores):
     stores = n.stores[n.stores.e_nom_extendable].index
 
     if stores.empty:
-        return
-
+            return
+            
     e_nom = n.model.variables["Store-e_nom"]
 
     min_caps = df_stores.loc[stores, "e_nom_min_cap"].to_dict()
@@ -347,12 +203,12 @@ def enforce_min_store_if_built(n, snapshots, df_stores):
     
     big_M = 1e9
 
-    # Add binary variables for store build decision
-    build_var = n.model.add_variables(name="store_build", binary=True)
-
     for store in stores:
         if store not in min_caps:
             continue
+
+        # Add binary variables for store build decision
+        build_var = n.model.add_variables(name=f"store_build_{store}", binary=True)
 
         # Access as expressions
         e = e_nom[store]
@@ -365,3 +221,148 @@ def enforce_min_store_if_built(n, snapshots, df_stores):
         # Constraint 2: min_cap * build - e_nom <= 0  ->  e_nom >= min_cap * build
         c_min = min_caps[store] * b - e <= 0
         n.model.add_constraints(c_min, name=f"store_min_if_built_{store}")
+
+
+# -------------------------
+# Piecewise DHN Modeling
+# -------------------------
+def add_piecewise_dhn_links(network, basepath, REGION, lifetime_dhn, INTEREST):
+    """
+    Adds heat links with dynamically calculated efficiencies based on normalized heat demand.
+
+    Args:
+        network (pypsa.Network): PyPSA network object.
+        basepath (str): Base path for the project directory.
+        REGION (str): Name of the region (used to find the CSV).
+    """
+
+    # Load CSV with loss and capacity info
+    df_loss = pd.read_csv(os.path.join(basepath, 'model', REGION, "costs_func_heat_grid.csv"))
+    capacity = df_loss['capacity'].values  # MW
+    losses = df_loss['efficiency'].values  # Total loss (1 - eff)
+    costs = df_loss['cost'].values
+
+    # Load and normalize heat demand
+    heat_demand = network.loads_t["p_set"].loc[:, "heat demand"]
+    heat_demand_normalized = heat_demand / heat_demand.max()
+
+    T = len(heat_demand)
+    N = len(capacity)
+
+    # Broadcast: demand_scaled = normalized_demand * each capacity
+    demand_scaled = heat_demand_normalized.values * capacity[:, np.newaxis]  # shape (N, T)
+    loss_broadcast = losses[:, np.newaxis]  # shape (N, 1)
+
+    # Avoid division by zero
+    demand_scaled[demand_scaled == 0] = np.nan
+
+    # Compute instantaneous efficiency
+    efficiency = 1 - (loss_broadcast / demand_scaled)  # shape (N, T)
+
+    # Store results in DataFrame
+    efficiency_df = pd.DataFrame(
+        efficiency.T,
+        index=heat_demand.index,
+        columns=[f"{int(c)} MW" for c in capacity]
+    )
+
+    # Save efficiency DataFrame to CSV
+    efficiency_df.to_csv(os.path.join(basepath, 'results', REGION, 'efficiency_heat_links.csv'))
+
+    # Add links with average efficiency per link (fallback to mean ignoring NaNs)
+    added_links = []
+    for i in range(N):
+        eff_series = efficiency[i, :]  # shape (T,)
+        
+        cap = capacity[i]
+        cost = costs[i]
+        annualized_costs = [annuity(cost, lifetime_dhn, INTEREST)]
+
+        cap_min = capacity[i-1] if i > 0 else 0  # Minimum capacity for the first link is 0
+
+        link_name = f"heating_grid_{int(cap)}MW"
+
+        network.add(
+            "Link",
+            name=link_name,
+            bus0='district heat',
+            bus1='heat',
+            p_nom_max=cap,
+            p_nom_extendable=True,
+            efficiency=eff_series,
+            capital_cost=annualized_costs/cap,  # Cost per MW
+        )
+
+        added_links.append(link_name)
+
+# -------------------------
+# Minimum DHN Capacity and Exclusivity Constraints
+# -------------------------
+def enforce_min_heat_link_if_built(n, snapshots, basepath, REGION):
+    """
+    Enforce minimum capacity for extendable heat grid links if built,
+    based on previous capacity tier from df_loss['capacity'].
+    Also enforce that only one link can be built at a time.
+
+    Args:
+        n (pypsa.Network): PyPSA network object.
+        snapshots (list): List of snapshots.
+        df_loss (pd.DataFrame): DataFrame with 'capacity' column, sorted by increasing capacity.
+
+    Returns:
+        None
+    """
+
+    # Filter extendable heat grid links
+    links = n.links[n.links.p_nom_extendable].index
+    links = [ln for ln in links if ln.startswith("heating_grid_")]
+    
+    if not links:
+        return
+
+    model = n.model
+    p_nom = model.variables["Link-p_nom"]
+
+    # Prepare capacity tier lookup (from df_loss)
+    df_loss = pd.read_csv(os.path.join(basepath, 'model', REGION, "costs_func_heat_grid.csv"))
+    capacity_list = df_loss['capacity'].sort_values().tolist()
+    min_caps = {}
+
+    for i in range(0, len(capacity_list)):
+        curr = int(capacity_list[i])
+        if i == 0:
+            # First capacity tier has no previous tier, set min capacity to 0
+            prev = 0
+        else:
+            prev = capacity_list[i - 1]
+        link_name = f"heating_grid_{curr}MW"
+        min_caps[link_name] = prev
+
+    # Big-M value, should be larger than max expected capacity
+    big_M = 1e6
+
+    build_vars = {}  # Store all binaries here
+
+    for link in links:
+        if link not in min_caps:
+            continue
+
+        # Add binary build variable and store it
+        b = model.add_variables(name=f"heat_link_build_{link}", binary=True)
+        build_vars[link] = b[link]  # store the scalar variable directly
+
+        p = p_nom[link]
+        min_cap = min_caps[link]
+
+        # Constraint 1: p_nom <= big_M * binary
+        c_max = p - big_M * build_vars[link] <= 0
+        model.add_constraints(c_max, name=f"heat_link_big_M_upper_{link}")
+
+        # Constraint 2: p_nom >= min_cap * binary
+        c_min = min_cap * build_vars[link] - p <= 0
+        model.add_constraints(c_min, name=f"heat_link_min_if_built_{link}")
+
+    # Add exclusivity constraint: sum of binaries ≤ 1 (only one link can be built)
+    exclusivity = sum(build_vars[link] for link in build_vars) <= 1
+
+    model.add_constraints(exclusivity, name="only_one_heat_link_built")

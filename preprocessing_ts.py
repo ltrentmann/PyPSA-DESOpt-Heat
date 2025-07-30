@@ -138,19 +138,30 @@ def time_series():
     
     # Standing losses thermal energy storage
     df_sto = pd.read_csv(DATAPATH + 'thermal-energy-storage.csv', **CSV)
+
     # Create an empty DataFrame to collect all results
-    combined_losses = pd.DataFrame()
+    combined_losses = []
 
     for storage in df_sto.index:
         row = df_sto.loc[storage]
         id_ = row['id']
-        if df_sto.loc[storage, 'type'] == 'PTES':
-            loss_series = tes.standing_loss_PTES(row, results['irradiation']["temperature"]-273.15)
-        elif df_sto.loc[storage, 'type'] == 'TTES':
-            loss_series = tes.standing_loss_TTES(row, results['irradiation']["temperature"]-273.15)
-        combined_losses[id_] = loss_series
+        ambient_temp = results['irradiation']["temperature"] - 273.15
 
-    combined_losses.to_csv(RESULTSPATH + "standing-losses-all.csv")
+        if row['type'] == 'PTES':
+            losses = tes.standing_loss_PTES(row, ambient_temp)  # returns DataFrame or dict of Series
+        elif row['type'] == 'TTES':
+            losses = tes.standing_loss_TTES(row, ambient_temp)
+
+        # losses is a DataFrame or dict of Series — flatten it to column-per-loss with store ID prefix
+        df = pd.DataFrame(losses)
+        df.columns = [f"{id_}_{col}" for col in df.columns]
+        combined_losses.append(df)
+
+    # Merge all losses into one DataFrame
+    combined_losses_df = pd.concat(combined_losses, axis=1)
+
+    # Export
+    combined_losses_df.to_csv(RESULTSPATH + "standing-losses-all.csv")
     print(RESULTSPATH + "standing-losses-all.csv")
 
     # Central DH Network and Large Heat Pump COPs

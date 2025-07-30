@@ -202,7 +202,7 @@ def flow_plot(network, bus_name, order, demand, title, folder):
 
     flows = flows.dropna(axis=1, how='all')
     flows = flows.loc[:, abs(flows).max() > 0.01]
-    flowsheating = flows.filter(like='heating grid')
+    flowsheating = flows.filter(regex='heating_grid')
     flows = flows.drop(columns=flowsheating.columns, errors='ignore')
     flows = flows.clip(lower=0)
 
@@ -292,7 +292,7 @@ def flow_plot(network, bus_name, order, demand, title, folder):
 
     if bus_name == "district heat":
         total_demand = network.loads_t.p_set["heat demand"].sum()
-        lcoh = (network.statistics.capex().sum() + network.statistics.opex().sum() + network.model.variables["pw_link_capcost"].solution) / total_demand
+        lcoh = (network.statistics.capex().sum() + network.statistics.opex().sum()) / total_demand
         ax2.text(0, -1.5, f'LCOH: {lcoh:.2f} €/MWh', ha='center', va='center')
 
         dec = network.generators_t.p.loc[:, network.generators.carrier.str.contains('dec')].sum()
@@ -404,7 +404,7 @@ def plot_heating_grid_loss(network, folder, bus_name=None):
     os.makedirs(output_path, exist_ok=True)
 
     # Identify heating grid links by name
-    heating_links = [link for link in network.links.index if "heating grid" in link.lower()]
+    heating_links = [link for link in network.links.index if "heating_grid" in link.lower()]
     if not heating_links:
         print("No links containing 'heating grid' in their name.")
         return 0.0
@@ -551,9 +551,8 @@ def create_summary_table(network):
         if link_name in network.links_t.marginal_cost:
             opex = (abs(network.links_t.marginal_cost[link_name] * op_series)).sum()
 
-        if link_name == "heating grid":
-            capex = network.model.variables["pw_link_capcost"].solution.item()
-            loss = (network.links_t.p0["heating grid"] + network.links_t.p1["heating grid"]).sum()
+        if "heating_grid" in link_name:
+            loss = (network.links_t.p0[link_name] + network.links_t.p1[link_name]).sum()
 
         summary_data.append({
             "Component": link_name,
@@ -563,7 +562,8 @@ def create_summary_table(network):
             "Generation (MWh)": abs(op_series.sum()),
             "Generation2 (MWh)": abs(op_series2.sum()) if 'op_series2' in locals() else 0,
             "CapEx (€)": capex,
-            "OpEx (€)": opex
+            "OpEx (€)": opex,
+            "Losses (MWh)": loss if 'loss' in locals() else 0
         })
 
     

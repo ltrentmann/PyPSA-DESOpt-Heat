@@ -74,7 +74,11 @@ def standing_loss_TTES(storage_row, temp):
         density=density
     )
 
-    return pd.Series(fixed_losses_relative, index=temp.index, name="relative_loss")
+    return {
+        "relative": fixed_losses_relative * nominal_storage_capacity,
+        "absolute": fixed_losses_absolute,
+        "loss_rate": loss_rate
+    }
 
 def standing_loss_PTES(storage_row, temp):
     """
@@ -108,6 +112,15 @@ def standing_loss_PTES(storage_row, temp):
     # Calculate diameter from volume formula for a cylinder: V = π * (d/2)^2 * h
     d = math.sqrt((4 * storage_row["volume"]) / (math.pi * h))
 
+    # Energy capacity
+    nominal_storage_capacity = calculate_capacities(
+        storage_row["volume"],
+        storage_row["temp_h"],
+        storage_row["temp_c"],
+        heat_capacity,
+        density
+    )
+
     # Surface areas
     A_top = math.pi * (d / 2)**2
     A_side = math.pi * d * h
@@ -128,5 +141,9 @@ def standing_loss_PTES(storage_row, temp):
         heat_capacity=heat_capacity,
         density=density
     )
-
-    return pd.Series(fixed_losses_relative, index=temp.index, name="relative_loss")
+   
+    return {
+        "relative": fixed_losses_relative * nominal_storage_capacity,
+        "absolute": fixed_losses_absolute,
+        "loss_rate": loss_rate
+    }
