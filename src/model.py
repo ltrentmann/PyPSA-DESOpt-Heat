@@ -222,6 +222,51 @@ def enforce_min_store_if_built(n, snapshots, df_stores):
         c_min = min_caps[store] * b - e <= 0
         n.model.add_constraints(c_min, name=f"store_min_if_built_{store}")
 
+# -------------------------
+# Link Minimum Capacity Enforcement
+# -------------------------
+def enforce_min_link_if_built(n, snapshots, df_links):
+    """
+    Enforce minimum capacity for links that are extendable and built.
+
+    Args:
+        n (pypsa.Network): PyPSA network object.
+        snapshots (List[Any]): List of time snapshots.
+        df_links (pd.DataFrame): DataFrame containing link data with minimum capacity attributes.
+
+    Returns:
+        None: Modifies the network object in place by adding constraints.
+    """
+
+    links = n.links[n.links.p_nom_extendable].index
+
+    links = [ln for ln in links if not ln.startswith("heating_grid_")]
+
+    p_nom = n.model.variables["Link-p_nom"]
+
+    min_caps = df_links.loc[links, "p_nom_min_cap"].to_dict()
+    min_caps = {link: cap for link, cap in min_caps.items() if not pd.isna(cap)}
+    
+    big_M = 1e9
+
+    for link in links:
+        if link not in min_caps:
+            continue
+        
+        # Add binary variables for link build decision
+        build_var = n.model.add_variables(name=f"link_build_{link}", binary=True)
+
+        # Access as expressions
+        p = p_nom[link]
+        b = build_var[link]
+
+        # Constraint 1: e_nom - big_M * build <= 0
+        c_max = p - big_M * b <= 0
+        n.model.add_constraints(c_max, name=f"link_big_M_upper_{link}")
+
+        # Constraint 2: min_cap * build - e_nom <= 0  ->  e_nom >= min_cap * build
+        c_min = min_caps[link] * b - p <= 0
+        n.model.add_constraints(c_min, name=f"link_min_if_built_{link}")
 
 # -------------------------
 # Piecewise DHN Modeling

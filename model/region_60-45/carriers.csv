@@ -6,7 +6,7 @@ biomethane,0.152,#679a1d,Biomethane for the district
 pv,0.0,#f9ba00,PV energy
 st,0.0,#d64c13,Solar thermal energy
 battery storage,0.0,#ffdc00,Battery storage
-TTES,0.0,#f9ba00,Tank thermal storage
+TTES,0.0,#9c0d16,Tank thermal storage
 PTES,0.0,#f9ba00,Pit thermal storage
 geothermal,0.0,#0f1b5f,Geothermal energy
 geothermal hp,0.0,#0f1b5f,Geothermal booster heat pump energy

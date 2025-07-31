@@ -1,5 +1,5 @@
 name,bus,carrier,e_nom_extendable,standing_loss,standing_loss_ts,e_cyclic,lifetime,investment,FOM,VOM,p_nom_max_area,factor,e_nom_min_cap,description,capital_cost,e_nom_opt
-TTES,TTES,TTES,True,,TTES,True,40.0,4422.34667,10.0,0.0,212200.0,1.17333333,,,233.43238477063912,225.71096212887394
+TTES,TTES,TTES,True,,TTES,True,40.0,4422.34667,10.0,0.0,212200.0,1.17333333,,,233.43238477063912,199.39499569372526
 PTES,PTES,PTES,True,,PTES,True,20.0,1460.22667,11.2666667,0.0,212200.0,34.7466667,261.63,,118.71270095514512,0.0
 elec market,elec market,electricity,True,1.0,,False,40.0,0.0,0.0,0.0,,,,,0.0,-0.0
 curtailment,district heat,heat,True,1.0,,False,40.0,0.0,0.0,0.0,,,,,0.0,1.0

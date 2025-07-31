@@ -137,6 +137,7 @@ def main():
     # --- Constraints and Optimization ---
     def extra_functionalities(network, snapshots):
         add_area_constraint(network, snapshots, df_generators, df_links, df_stores, df_storageunits)
+        enforce_min_link_if_built(network, snapshots, df_links)
         enforce_min_store_if_built(network, snapshots, df_stores)
         enforce_min_heat_link_if_built(network, snapshots, basepath, REGION)
 

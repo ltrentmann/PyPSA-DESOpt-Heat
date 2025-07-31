@@ -75,7 +75,7 @@ def standing_loss_TTES(storage_row, temp):
     )
 
     return {
-        "relative": fixed_losses_relative * nominal_storage_capacity,
+        "relative": fixed_losses_relative,
         "absolute": fixed_losses_absolute,
         "loss_rate": loss_rate
     }
@@ -143,7 +143,7 @@ def standing_loss_PTES(storage_row, temp):
     )
    
     return {
-        "relative": fixed_losses_relative * nominal_storage_capacity,
+        "relative": fixed_losses_relative,
         "absolute": fixed_losses_absolute,
         "loss_rate": loss_rate
     }

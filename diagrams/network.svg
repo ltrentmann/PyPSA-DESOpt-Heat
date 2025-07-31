@@ -76,7 +76,7 @@
 <!-- district elec (bus)&#45;&gt;elec market (bus) -->
 <g id="edge16" class="edge">
 <title>district elec (bus)&#45;&gt;elec market (bus)</title>
-<g id="a_edge16"><a xlink:title="Link: selling&#10;From: district elec (bus0)&#10;To: elec market (bus1)&#10;Carrier: electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [&#45;4.97, &#45;4.97, &#45;4.97, &#45;4.97, &#45;4.97, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge16"><a xlink:title="Link: selling&#10;From: district elec (bus0)&#10;To: elec market (bus1)&#10;Carrier: electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [&#45;49.73, &#45;49.73, &#45;49.73, &#45;49.73, &#45;49.73, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M1153.78,-496.01C921.14,-466.9 273.8,-385.92 273.8,-385.92 273.8,-385.92 206.9,-362.88 161,-347.07"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="150.41,-343.42 163.52,-342.22 154.44,-344.54 161.84,-347.09 161.76,-347.33 161.68,-347.57 154.28,-345.02 160,-352.43 150.41,-343.42"/>
 </a>
@@ -268,7 +268,7 @@
 <!-- heat demand (load) -->
 <g id="node14" class="node">
 <title>heat demand (load)</title>
-<g id="a_node14"><a xlink:title="Load: heat demand&#10;Bus: heat&#10;Carrier: heat&#10;Power set: [24.99, 25.35, 28.11, 32.54, 39.09, ...] ">
+<g id="a_node14"><a xlink:title="Load: heat demand&#10;Bus: heat&#10;Carrier: heat&#10;Power set: [22.88, 23.26, 25.73, 29.77, 35.83, ...] ">
 <polygon fill="none" stroke="black" stroke-width="2" points="1147.8,0 1214.73,-64.8 1080.87,-64.8 1147.8,0"/>
 <text text-anchor="start" x="1123.05" y="-40.47" font-family="Courier New" font-size="8.00" fill="red">heat demand</text>
 </a>

@@ -252,7 +252,6 @@ def flow_plot(network, bus_name, order, demand, title, folder):
     ax1.set_xlabel("Date")
     ax1.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=5, frameon=True, framealpha=0.8)
     ax1.set_ylim(round(flowsstorage.resample('D').mean().sum(axis=1).min()), round(flows.resample('D').mean().sum(axis=1).max()))
-    ax1.grid(True)
 
     sum_values = flows.sum()
     # substract the sum of store[curtailment] from geothermal hp or goethermal
@@ -334,7 +333,6 @@ def plot_storage_energy(network, bus_name, folder, temp_h, temp_c):
 
     ax.set_ylabel("Energy Stored in MWh")
     ax.set_xlabel("Date")
-    ax.grid(True)
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=4, frameon=True, framealpha=0.8)
 
     # Area and geometry calc
@@ -427,7 +425,6 @@ def plot_heating_grid_loss(network, folder, bus_name=None):
     ax.set_ylabel("Losses [MW]")
     ax.set_xlabel("Date")
     ax.set_title(f"Heating Grid Losses{f' at {bus_name}' if bus_name else ''}")
-    ax.grid(True)
     ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.5), ncol=2, frameon=True, framealpha=0.8)
 
     # Summary stats for display in right panel
@@ -471,6 +468,7 @@ def create_summary_table(network):
         op_series = network.generators_t.p[gen_name]
         if gen_name in network.generators_t.marginal_cost:
             opex = (abs(network.generators_t.marginal_cost[gen_name] * op_series)).sum()
+        co2_emissions = (network.generators_t.p[gen_name] * network.carriers.co2_emissions[network.generators.carrier[gen_name]]).sum().sum()
 
         summary_data.append({
             "Component": gen_name,
@@ -479,7 +477,8 @@ def create_summary_table(network):
             "Installed Capacity (MW)": installed_capacity,
             "Generation (MWh)": abs(op_series.sum()),
             "CapEx (€)": capex,
-            "OpEx (€)": opex
+            "OpEx (€)": opex,
+            "CO2 Emissions (t)": co2_emissions
         })
 
     # --- Extendable Storage Units (optional) ---
@@ -493,7 +492,6 @@ def create_summary_table(network):
         op_series = network.storage_units_t.p[store_name]
         if store_name in network.storage_units_t.marginal_cost:
             opex = (abs(network.storage_units_t.marginal_cost[store_name] * op_series)).sum()
-        co2_emissions = (network.generators_t.p[gen_name] * network.carriers.co2_emissions[network.generators.carrier[gen_name]]).sum().sum()
 
         summary_data.append({
             "Component": store_name,
@@ -503,7 +501,7 @@ def create_summary_table(network):
             "Generation (MWh)": abs(op_series.sum()),
             "CapEx (€)": capex,
             "OpEx (€)": opex,
-            "CO2 Emissions (t)": co2_emissions
+            
         })
 
     # --- Extendable Stores (optional) ---
@@ -541,6 +539,7 @@ def create_summary_table(network):
                 mean_efficiency = link.efficiency
 
             installed_capacity = p_nom_opt * mean_efficiency
+            loss = (network.links_t.p0[link_name] + network.links_t.p1[link_name]).sum()
         else:
             installed_capacity = link.p_nom
 
@@ -552,7 +551,7 @@ def create_summary_table(network):
             opex = (abs(network.links_t.marginal_cost[link_name] * op_series)).sum()
 
         if "heating_grid" in link_name:
-            loss = (network.links_t.p0[link_name] + network.links_t.p1[link_name]).sum()
+            installed_capacity = p_nom_opt
 
         summary_data.append({
             "Component": link_name,
