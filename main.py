@@ -171,7 +171,7 @@ def main():
     print(f"Elapsed time: {end - start:.5f} seconds")
 
     # --- Results ---
-    print("Objective value:", network.objective)
+    print("Objective Value:", network.objective)
     print("SUM:", network.statistics.opex().sum() + network.statistics.capex().sum())
     
     # --- Export Results ---
