@@ -302,7 +302,7 @@
 <!-- biomethane CHP (multi&#45;link) -->
 <g id="node20" class="node">
 <title>biomethane CHP (multi&#45;link)</title>
-<g id="a_node20"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal energy: True&#10;Nominal power: 0.00 MW&#10;Capital cost: 44268.39 currency/MW&#10;Marginal cost: [5.94, 5.94, 5.94, 5.94, 5.94, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW">
+<g id="a_node20"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal energy: True&#10;Nominal power: 0.00 MW&#10;Capital cost: 30594.97 currency/MW&#10;Marginal cost: [3.20, 3.20, 3.20, 3.20, 3.20, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW">
 <ellipse fill="black" stroke="black" cx="1688.8" cy="-673.77" rx="2.16" ry="2.16"/>
 </a>
 </g>
@@ -310,7 +310,7 @@
 <!-- district biomethane (bus)&#45;&gt;biomethane CHP (multi&#45;link) -->
 <g id="edge32" class="edge">
 <title>district biomethane (bus)&#45;&gt;biomethane CHP (multi&#45;link)</title>
-<g id="a_edge32"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Capital cost: 44268.39 currency/MW&#10;Marginal cost: [5.94, 5.94, 5.94, 5.94, 5.94, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW">
+<g id="a_edge32"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Capital cost: 30594.97 currency/MW&#10;Marginal cost: [3.20, 3.20, 3.20, 3.20, 3.20, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M1767.7,-800.3C1758.27,-786.81 1742.8,-764.66 1742.8,-764.66 1742.8,-764.66 1696.13,-686.96 1689.56,-676.04"/>
 </a>
 </g>
@@ -401,7 +401,7 @@
 <!-- electricity grid (generator) -->
 <g id="node9" class="node">
 <title>electricity grid (generator)</title>
-<g id="a_node9"><a xlink:title="Generator: electricity grid&#10;Bus: district elec&#10;Carrier: grid electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 22140.00 currency/&#10;Marginal cost: [168.73, 168.73, 168.73, 168.73, 168.73, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
+<g id="a_node9"><a xlink:title="Generator: electricity grid&#10;Bus: district elec&#10;Carrier: grid electricity&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 22140.00 currency/&#10;Marginal cost: [174.10, 174.10, 174.10, 173.33, 173.33, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
 <ellipse fill="none" stroke="black" stroke-width="2" cx="1314.8" cy="-673.77" rx="45.15" ry="45.15"/>
 <text text-anchor="start" x="1278.8" y="-671.04" font-family="Courier New" font-size="8.00" fill="red">electricity grid</text>
 </a>
@@ -415,7 +415,7 @@
 <!-- st panels (generator) -->
 <g id="node10" class="node">
 <title>st panels (generator)</title>
-<g id="a_node10"><a xlink:title="Generator: st panels&#10;Bus: district heat&#10;Carrier: st&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 16049.10 currency/&#10;Marginal cost: [0.32, 0.32, 0.32, 0.32, 0.32, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
+<g id="a_node10"><a xlink:title="Generator: st panels&#10;Bus: district heat&#10;Carrier: st&#10;Extendable nominal power: True&#10;Nominal power: 0.00 &#10;Power set: 0.00 &#10;Efficiency: 1.00&#10;Capital cost: 14202.09 currency/&#10;Marginal cost: [0.24, 0.24, 0.24, 0.24, 0.24, ...] currency/h&#10;&#10;Optimised nominal power: 0.00 &#10;Power time series: N/A ">
 <ellipse fill="none" stroke="black" stroke-width="2" cx="1504.8" cy="-507.27" rx="39.6" ry="39.6"/>
 <text text-anchor="start" x="1484.55" y="-504.54" font-family="Courier New" font-size="8.00" fill="red">st panels</text>
 </a>
@@ -471,7 +471,7 @@
 <!-- biomethane CHP (multi&#45;link)&#45;&gt;district elec (bus) -->
 <g id="edge33" class="edge">
 <title>biomethane CHP (multi&#45;link)&#45;&gt;district elec (bus)</title>
-<g id="a_edge33"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.43&#10;Capital cost: 44268.39 currency/MW&#10;Marginal cost: [5.94, 5.94, 5.94, 5.94, 5.94, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge33"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district elec (bus1)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.43&#10;Capital cost: 30594.97 currency/MW&#10;Marginal cost: [3.20, 3.20, 3.20, 3.20, 3.20, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M1687.16,-672.17C1663.17,-663.46 1382.57,-561.56 1276.27,-522.96"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="1265.63,-519.1 1278.75,-518.12 1269.64,-520.29 1276.99,-522.96 1276.91,-523.19 1276.82,-523.43 1269.47,-520.76 1275.07,-528.27 1265.63,-519.1"/>
 </a>
@@ -481,7 +481,7 @@
 <!-- biomethane CHP (multi&#45;link)&#45;&gt;district heat (bus) -->
 <g id="edge34" class="edge">
 <title>biomethane CHP (multi&#45;link)&#45;&gt;district heat (bus)</title>
-<g id="a_edge34"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.58&#10;Capital cost: 44268.39 currency/MW&#10;Marginal cost: [5.94, 5.94, 5.94, 5.94, 5.94, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p2): N/A MW">
+<g id="a_edge34"><a xlink:title="Multi&#45;link: biomethane CHP&#10;From: district biomethane (bus0)&#10;To: district heat (bus2)&#10;Carrier: biomethane CHP&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 0.58&#10;Capital cost: 30594.97 currency/MW&#10;Marginal cost: [3.20, 3.20, 3.20, 3.20, 3.20, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p2): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M1688.45,-671.25C1683.69,-650.75 1632.04,-428.3 1615.13,-355.47"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="1612.56,-344.44 1620.54,-354.91 1613.75,-348.45 1615.52,-356.07 1615.28,-356.13 1615.04,-356.19 1613.27,-348.56 1610.02,-357.35 1612.56,-344.44"/>
 </a>
