@@ -322,7 +322,7 @@
 <!-- district heat (bus)&#45;&gt;TTES (bus) -->
 <g id="edge17" class="edge">
 <title>district heat (bus)&#45;&gt;TTES (bus)</title>
-<g id="a_edge17"><a xlink:title="Link: TTES charge&#10;From: district heat (bus0)&#10;To: TTES (bus1)&#10;Carrier: TTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [20.00, 20.00, 20.00, 20.00, 20.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge17"><a xlink:title="Link: TTES charge&#10;From: district heat (bus0)&#10;To: TTES (bus1)&#10;Carrier: TTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [1.00, 1.00, 1.00, 1.00, 1.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M2396.3,-320.24C2649.52,-296.73 3248.36,-241.15 3248.36,-241.15 3248.36,-241.15 3469.89,-208.82 3594.94,-190.57"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="3606.03,-188.96 3594.93,-196.03 3601.94,-189.81 3594.19,-190.94 3594.15,-190.69 3594.12,-190.44 3601.86,-189.31 3593.37,-185.35 3606.03,-188.96"/>
 </a>
@@ -342,7 +342,7 @@
 <!-- district heat (bus)&#45;&gt;PTES (bus) -->
 <g id="edge18" class="edge">
 <title>district heat (bus)&#45;&gt;PTES (bus)</title>
-<g id="a_edge18"><a xlink:title="Link: PTES charge&#10;From: district heat (bus0)&#10;To: PTES (bus1)&#10;Carrier: PTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [20.00, 20.00, 20.00, 20.00, 20.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge18"><a xlink:title="Link: PTES charge&#10;From: district heat (bus0)&#10;To: PTES (bus1)&#10;Carrier: PTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [1.00, 1.00, 1.00, 1.00, 1.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M2404.64,-321.78C2711.33,-299.27 3503.36,-241.15 3503.36,-241.15 3503.36,-241.15 3755.25,-208.56 3895.97,-190.35"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="3907,-188.93 3895.8,-195.82 3902.9,-189.71 3895.13,-190.71 3895.1,-190.47 3895.07,-190.22 3902.83,-189.21 3894.41,-185.11 3907,-188.93"/>
 </a>
@@ -419,7 +419,7 @@
 <!-- TTES (bus)&#45;&gt;district heat (bus) -->
 <g id="edge40" class="edge">
 <title>TTES (bus)&#45;&gt;district heat (bus)</title>
-<g id="a_edge40"><a xlink:title="Link: TTES discharge&#10;From: TTES (bus0)&#10;To: district heat (bus1)&#10;Carrier: TTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [20.00, 20.00, 20.00, 20.00, 20.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge40"><a xlink:title="Link: TTES discharge&#10;From: TTES (bus0)&#10;To: district heat (bus1)&#10;Carrier: TTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [1.00, 1.00, 1.00, 1.00, 1.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M3629.16,-188.69C3544.05,-206.49 3378.36,-241.15 3378.36,-241.15 3378.36,-241.15 2708.44,-295.93 2417.55,-319.72"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="2406.23,-320.65 2417.75,-314.29 2410.37,-320.06 2418.17,-319.42 2418.19,-319.67 2418.21,-319.92 2410.41,-320.56 2418.63,-325.05 2406.23,-320.65"/>
 </a>
@@ -445,7 +445,7 @@
 <!-- PTES (bus)&#45;&gt;district heat (bus) -->
 <g id="edge41" class="edge">
 <title>PTES (bus)&#45;&gt;district heat (bus)</title>
-<g id="a_edge41"><a xlink:title="Link: PTES discharge&#10;From: PTES (bus0)&#10;To: district heat (bus1)&#10;Carrier: PTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [20.00, 20.00, 20.00, 20.00, 20.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
+<g id="a_edge41"><a xlink:title="Link: PTES discharge&#10;From: PTES (bus0)&#10;To: district heat (bus1)&#10;Carrier: PTES&#10;Extendable nominal power: True&#10;Nominal power: 0.00 MW&#10;Efficiency: 1.00&#10;Capital cost: 0.00 currency/MW&#10;Marginal cost: [1.00, 1.00, 1.00, 1.00, 1.00, ...] currency/MWh&#10;&#10;Optimised nominal power: 0.00 MW&#10;Power time series (p0): N/A MW&#10;Power time series (p1): N/A MW">
 <path fill="none" stroke="black" stroke-width="1.5" d="M3931.45,-188.69C3833.01,-206.49 3641.36,-241.15 3641.36,-241.15 3641.36,-241.15 2758.69,-299.33 2417.64,-321.81"/>
 <polygon fill="black" stroke="black" stroke-width="1.5" points="2406.33,-322.56 2417.95,-316.38 2410.48,-322.04 2418.29,-321.52 2418.31,-321.77 2418.32,-322.02 2410.51,-322.53 2418.66,-327.16 2406.33,-322.56"/>
 </a>
