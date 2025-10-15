@@ -15,3 +15,4 @@ biomethane boiler,0.0,#679a1d,Biomethane boiler
 biomethane CHP,0.0,#007c30,Biomethane combined heat and power
 dec air heat pump,0.107,#005293,Decentral air heat pump
 dec ground heat pump,0.107,#0f1b5f,Decentral ground heat pump
+load,0.0,#CCCCCC,Load

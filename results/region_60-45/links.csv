@@ -1,31 +1,32 @@
-name,bus0,bus1,carrier,efficiency,build_year,lifetime,p_nom_extendable,p_nom_max,p_min_pu,min_up_time,min_down_time,up_time_before,down_time_before,bus2,efficiency2,bus3,efficiency3,investment,fuel_costs,FOM,VOM,efficiency_ts,fuel_costs_ts,p_max_pu_ts,p_min_pu_ts,picewise_costs_func,p_nom_max_area,factor,p_nom_min_cap,description,capital_cost,p_nom_opt
-biomethane boiler,district biomethane,district heat,biomethane boiler,1.06,0,25.0,True,inf,0.0,0,0,1,0,,1.0,,,50000.0,0.0,2020.41,1.06,,,,,,,,,data from DEA year 2020 gas boiler,5534.268627682093,24.428530273788855
-biomethane CHP,district biomethane,district elec,biomethane CHP,0.43,0,25.0,True,inf,0.0,0,0,1,0,district heat,0.585,,,957035.45,0.0,9889.36628,7.44360903,,,,,,,,1.0,,30594.966073008658,19.238162096322093
-large scale heat pump,district elec,district heat,heat pump,,0,25.0,True,inf,0.0,0,0,1,0,,1.0,,,810000.0,0.0,2126.75,1.8,COP central large tdhn 60 air,,,,,,,1.0,source water 10 degree data from DEA year 2020 10 MW,178859.12863230845,12.596465701206274
-geothermal plant,district elec,district heat,geothermal,25.0,0,30.0,True,0.0,0.7,0,0,1,0,,1.0,,,2650000.0,0.0,22437.16,6.23,,,,,,212200.0,5000.0,,data from DEA 1200m,4392173.067605061,0.0
-TTES charge,district heat,TTES,TTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,1.0,,,0.0,0.0,0.0,20.0,,,,,,,,,,0.0,44.0
-TTES discharge,TTES,district heat,TTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,1.0,,,0.0,0.0,0.0,20.0,,,,,,,,,,0.0,38.0
-elec boiler,district elec,district heat,electricity,0.99,0,25.0,True,inf,0.0,0,0,1,0,,1.0,,,150000.0,0.0,1084.64,1.06,,,,,,,,,,10579.570073788507,0.0
-PTES charge,district heat,PTES,PTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,1.0,,,0.0,0.0,0.0,20.0,,,,,,,,,,0.0,0.0
-PTES discharge,PTES,district heat,PTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,1.0,,,0.0,0.0,0.0,20.0,,,,,,,,,,0.0,0.0
-selling,district elec,elec market,electricity,0.0,0,20.0,True,inf,0.0,0,0,1,0,,1.0,,,0.0,-49.73,0.0,0.0,,,,,,,,,,0.0,12.0
-heating_grid_7MW,district heat,heat,heat,1.0,0,inf,True,7.211526626740208,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,23781.93394620206,0.0
-heating_grid_14MW,district heat,heat,heat,1.0,0,inf,True,14.26633167723044,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,19567.64999833417,0.0
-heating_grid_21MW,district heat,heat,heat,1.0,0,inf,True,21.380435696662342,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,16028.826058161341,0.0
-heating_grid_28MW,district heat,heat,heat,1.0,0,inf,True,28.525783559411103,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,15203.667504696006,0.0
-heating_grid_35MW,district heat,heat,heat,1.0,0,inf,True,35.78923754042119,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,16527.00943687035,0.0
-heating_grid_42MW,district heat,heat,heat,1.0,0,inf,True,42.66455302888717,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,19159.822921442326,0.0
-heating_grid_49MW,district heat,heat,heat,1.0,0,inf,True,49.77996586668048,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,19794.947578941905,0.0
-heating_grid_56MW,district heat,heat,heat,1.0,0,inf,True,56.78311225680219,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,21766.8605989141,0.0
-heating_grid_63MW,district heat,heat,heat,1.0,0,inf,True,63.90134651709368,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,22694.92548357884,0.0
-heating_grid_71MW,district heat,heat,heat,1.0,0,inf,True,71.03209725602127,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,23435.83787171277,0.0
-heating_grid_78MW,district heat,heat,heat,1.0,0,inf,True,78.14262341775947,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,24507.48887551947,0.0
-heating_grid_85MW,district heat,heat,heat,1.0,0,inf,True,85.300896060368,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,25753.35891883503,0.0
-heating_grid_92MW,district heat,heat,heat,1.0,0,inf,True,92.3779746196676,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,27383.1046969968,92.3779746197
-heating_grid_99MW,district heat,heat,heat,1.0,0,inf,True,99.36685541701154,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,30014.55693699941,0.0
-heating_grid_106MW,district heat,heat,heat,1.0,0,inf,True,106.53336725425795,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,33038.13351798354,0.0
-heating_grid_113MW,district heat,heat,heat,1.0,0,inf,True,113.87891594179868,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,37326.35802777458,0.0
-heating_grid_121MW,district heat,heat,heat,1.0,0,inf,True,121.24204196638244,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,43314.74293916998,0.0
-heating_grid_128MW,district heat,heat,heat,1.0,0,inf,True,128.80052890820414,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,50082.54773082643,0.0
-heating_grid_136MW,district heat,heat,heat,1.0,0,inf,True,136.35662208036513,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,58124.05547517586,0.0
-heating_grid_143MW,district heat,heat,heat,1.0,0,inf,True,143.8750751193148,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,77180.50246463195,0.0
+name,bus0,bus1,carrier,efficiency,build_year,lifetime,p_nom_extendable,p_nom_max,p_min_pu,min_up_time,min_down_time,up_time_before,down_time_before,ramp_limit_up,ramp_limit_down,bus2,efficiency2,bus3,efficiency3,investment,fuel_costs,FOM,VOM,efficiency_ts,fuel_costs_ts,p_max_pu_ts,p_min_pu_ts,picewise_costs_func,p_nom_max_area,factor,p_nom_min_cap,description,capital_cost,p_nom_opt
+biomass boiler,district biomass,district heat,biomass boiler,1.14,0,25.0,True,0.0,0.0,0,0,1,0,,,,1.0,,,701825.9,0.0,33496.24,3.65,,,,,,,,,data from DEA year 2030 wood chip HOP,89400.5024684418,0.0
+biomethane boiler,district biomethane,district heat,biomethane boiler,1.06,0,25.0,True,inf,0.0,0,0,1,0,,,,1.0,,,50000.0,0.0,2020.41,1.06,,,,,,,,,data from DEA year 2020 gas boiler,5534.268627682093,20.07357689528706
+biomethane CHP,district biomethane,district elec,biomethane CHP,0.43,0,25.0,True,inf,0.0,0,0,1,0,,,district heat,0.585,,,957035.45,0.0,9889.36628,7.44360903,,,,,,,,,,30594.966073008658,15.64108408436151
+large scale heat pump,district elec,district heat,heat pump,,0,25.0,True,inf,0.0,0,0,1,0,0.6,0.6,,1.0,,,810000.0,0.0,2126.75,1.8,COP central large tdhn 60 air,,,,,,,,source water 10 degree data from DEA year 2020 10 MW,178859.12863230845,13.629276870809514
+geothermal plant,district elec,district heat,geothermal,25.0,0,30.0,True,0.0,0.7,0,0,1,0,,,,1.0,,,2650000.0,0.0,22437.16,6.23,,,,,,212200.0,5000.0,,data from DEA 1200m,4392173.067605061,0.0
+TTES charge,district heat,TTES,TTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,1.0,,,,,,,,,,0.0,67.0
+TTES discharge,TTES,district heat,TTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,1.0,,,,,,,,,,0.0,60.0
+elec boiler,district elec,district heat,electricity,0.99,0,25.0,True,inf,0.0,0,0,1,0,,,,1.0,,,150000.0,0.0,1084.64,1.06,,,,,,,,,,10579.570073788507,0.0
+PTES charge,district heat,PTES,PTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,1.0,,,,,,,,,,0.0,0.0
+PTES discharge,PTES,district heat,PTES,1.0,0,20.0,True,inf,0.0,0,0,1,0,,,,1.0,,,0.0,0.0,0.0,1.0,,,,,,,,,,0.0,0.0
+selling,district elec,elec market,electricity,1.0,0,20.0,True,inf,0.0,0,0,1,0,,,,1.0,,,0.0,-49.73,0.0,0.0,,,,,,,,,,0.0,11.0
+heating_grid_7MW,district heat,heat,heat,1.0,0,inf,True,7.211526626740208,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,23781.93394620206,0.0
+heating_grid_14MW,district heat,heat,heat,1.0,0,inf,True,14.26633167723044,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,19567.64999833417,0.0
+heating_grid_21MW,district heat,heat,heat,1.0,0,inf,True,21.380435696662342,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,16028.826058161341,0.0
+heating_grid_28MW,district heat,heat,heat,1.0,0,inf,True,28.525783559411103,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,15203.667504696006,0.0
+heating_grid_35MW,district heat,heat,heat,1.0,0,inf,True,35.78923754042119,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,16527.00943687035,0.0
+heating_grid_42MW,district heat,heat,heat,1.0,0,inf,True,42.66455302888717,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,19159.822921442326,0.0
+heating_grid_49MW,district heat,heat,heat,1.0,0,inf,True,49.77996586668048,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,19794.947578941905,0.0
+heating_grid_56MW,district heat,heat,heat,1.0,0,inf,True,56.78311225680219,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,21766.8605989141,0.0
+heating_grid_63MW,district heat,heat,heat,1.0,0,inf,True,63.90134651709368,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,22694.92548357884,0.0
+heating_grid_71MW,district heat,heat,heat,1.0,0,inf,True,71.03209725602127,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,23435.83787171277,0.0
+heating_grid_78MW,district heat,heat,heat,1.0,0,inf,True,78.14262341775947,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,24507.48887551947,0.0
+heating_grid_85MW,district heat,heat,heat,1.0,0,inf,True,85.300896060368,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,25753.35891883503,0.0
+heating_grid_92MW,district heat,heat,heat,1.0,0,inf,True,92.3779746196676,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,27383.1046969968,92.3779746197
+heating_grid_99MW,district heat,heat,heat,1.0,0,inf,True,99.36685541701154,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,30014.55693699941,0.0
+heating_grid_106MW,district heat,heat,heat,1.0,0,inf,True,106.53336725425795,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,33038.13351798354,0.0
+heating_grid_113MW,district heat,heat,heat,1.0,0,inf,True,113.87891594179868,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,37326.35802777458,0.0
+heating_grid_121MW,district heat,heat,heat,1.0,0,inf,True,121.24204196638244,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,43314.74293916998,0.0
+heating_grid_128MW,district heat,heat,heat,1.0,0,inf,True,128.80052890820414,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,50082.54773082643,0.0
+heating_grid_136MW,district heat,heat,heat,1.0,0,inf,True,136.35662208036513,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,58124.05547517586,0.0
+heating_grid_143MW,district heat,heat,heat,1.0,0,inf,True,143.8750751193148,0.0,0,0,1,0,,,,,,,,,,,,,,,,,,,,77180.50246463195,0.0

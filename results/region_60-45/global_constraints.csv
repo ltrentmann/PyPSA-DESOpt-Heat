@@ -1,2 +1,2 @@
 name,sense,constant
-co2_limit,<=,inf
+co2_limit,<=,1000000.0

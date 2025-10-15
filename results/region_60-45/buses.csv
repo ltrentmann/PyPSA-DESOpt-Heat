@@ -2,7 +2,9 @@ name,carrier
 district elec,electricity
 district heat,heat
 heat,heat
+district biomass,biomass
 district biomethane,biomethane
 TTES,TTES
 PTES,PTES
 elec market,electricity
+curtailment,curtailment
