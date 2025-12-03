@@ -177,6 +177,9 @@ def main():
     # --- Export Results ---
     network.export_to_csv_folder(os.path.join("./results", RESULTS))
 
+    # --- Export nc file ---
+    network.export_to_netcdf(os.path.join(results_folder, "network.nc"))
+
     # --- Print Summary ---
     print("\n--- Optimization Results Summary ---")
     print("p_nom_opt (Generators):\n", network.generators.p_nom_opt)

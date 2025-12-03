@@ -20,6 +20,7 @@ PyPSA-DESOpt-Heat is a linear programming district energy system optimization mo
   - [Feature overview](#Feature-overview)
   - [Contents](#contents)
   - [Description](#description)
+      - [Schematic overview of the urban energy system modeling approach](#overview-approach)
       - [Components of the District Energy System Model](#description-DES)
       - [Timeseries Preprocessing](#description-Pre)
   - [Install](#install)
@@ -35,6 +36,10 @@ To run the model, ensure the following:
 
 - All required **PyPSA components** are defined in the CSV network files located in the `model` folder.
 - A **cost function** for the district heating network (DHN) build-out is specified in the `cost_func_heat_grid.csv` file.
+
+### Schematic overview of the urban energy system modeling approach
+
+![overview-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/diagrams/2023-04-25_overview-preprocessing-eng.drawio.svg "overview-approach")
 
 ### Components of the District Energy System Model
 The components must be defined as follows:
@@ -91,6 +96,9 @@ For a more detailed description of the PyPSA components, refer to the [PyPSA Doc
 > T. Brown, J. Hörsch, D. Schlachtberger, *PyPSA: Python for Power System Analysis*, Journal of Open Research Software, 6(1), 2018. DOI: [10.5334/jors.188](https://doi.org/10.5334/jors.188). Available at [arXiv:1707.09913](https://arxiv.org/abs/1707.09913).
 
 ### Timeseries Preprocessing
+
+![ts-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/diagrams/2023-07-25_overview-time-series.drawio.svg "ts-approach")
+
 If generation timeseries of renewables like, PV, ST or COPs and standing loss timeseries of TES are needed run `preprocessing_ts.py`
 
 The required technology data parameters must be specified in the relevant CSV files in the data folder.
