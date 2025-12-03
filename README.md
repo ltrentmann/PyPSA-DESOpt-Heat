@@ -42,7 +42,7 @@ To run the model, ensure the following:
 
 ### Schematic overview of the urban energy system modeling approach
 
-![overview-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/diagrams/2023-04-25_overview-preprocessing-eng.drawio.svg "overview-approach")
+![overview-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/2023-04-25_overview-preprocessing-eng.drawio.svg "overview-approach")
 
 ### Components of the District Energy System Model
 The components must be defined as follows:
@@ -100,7 +100,7 @@ For a more detailed description of the PyPSA components, refer to the [PyPSA Doc
 
 ### Timeseries Preprocessing
 
-![ts-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/diagrams/2023-07-25_overview-time-series.drawio.svg "ts-approach")
+![ts-approach](https://github.com/ltrentmann/PyPSA-DESOpt-Heat/blob/main/diagrams/2023-07-25_overview-time-series.drawio.svg "ts-approach")
 
 If generation timeseries of renewables like, PV, ST or COPs and standing loss timeseries of TES are needed run `preprocessing_ts.py`
 
