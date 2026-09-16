@@ -5,7 +5,7 @@ PyPSA for District Energy System Optimization with focus on the Heat Sector
 PyPSA-DESOpt-Heat is a linear programming district energy system optimization model for designing cost-optimal district energy systems. It focuses on distributed and building-specific heat supply and integrates sector coupling within energy system modeling.
 
 For more details refer to the original research paper:
->  Trentmann, Lennart and Ceruti, Amedeo and Schweiger, Benedikt and Spliethoff, Hartmut, What district heating share is optimal for a municipality? A holistic approach including supply temperatures. Available at SSRN: https://ssrn.com/abstract=5986796 or http://dx.doi.org/10.2139/ssrn.5986796
+>  Trentmann, Lennart and Ceruti, Amedeo and Schweiger, Benedikt and Spliethoff, Hartmut, What district heating share is optimal for a municipality? A holistic approach including supply temperatures, Energy Conversion and Management, 357, 2026, 121434, 10.1016/j.enconman.2026.121434
 
 ## Feature overview
 
@@ -14,6 +14,12 @@ For more details refer to the original research paper:
   * Greenfield and brownfield optimization
 * Cost-optimal decision between district heating network (DHN) build-out and building-specific heat supply
 * Preprocessing functions included for timeseries calcuation of COPs, PV, ST and standing losses of TES
+
+## How to cite
+
+If you use PyPSA-DESOpt-Heat, please cite:
+>  Trentmann, Lennart and Ceruti, Amedeo and Schweiger, Benedikt and Spliethoff, Hartmut, What district heating share is optimal for a municipality? A holistic approach including supply temperatures. Energy Conversion and Management, 357, 2026, 121434, 10.1016/j.enconman.2026.121434
+
 
 ## Contents
 
