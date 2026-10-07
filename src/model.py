@@ -302,7 +302,7 @@ def add_piecewise_dhn_links(network, basepath, REGION, lifetime_dhn, INTEREST):
     demand_scaled[demand_scaled == 0] = np.nan
 
     # Compute instantaneous efficiency
-    efficiency = 1 - (loss_broadcast / demand_scaled)  # shape (N, T)
+    efficiency = demand_scaled / (demand_scaled + loss_broadcast) # shape (N, T)
 
     # Store results in DataFrame
     efficiency_df = pd.DataFrame(
